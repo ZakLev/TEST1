@@ -10,12 +10,76 @@
     <div id="navbar-container"></div>
     <h1>Projects</h1>
     <p>Here are some of the projects Zak Levine has worked on:</p>
-    <iframe src="Game/index.html" width="1170" height="650" frameborder="0">Game Test</iframe>
+    
+    <!-- Category Filter Section -->
+    <div class="filter-section">
+        <div class="filter-title">Filter by Category:</div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All Projects</button>
+            <button class="filter-btn" data-filter="game">Game</button>
+            <button class="filter-btn" data-filter="graphics">Graphics</button>
+            <button class="filter-btn" data-filter="ai">AI</button>
+            <button class="filter-btn" data-filter="software-development">Software Development</button>
+        </div>
+    </div>
+    
+    <div class="projects-container">
+        <a href="Projects/Game/index.html" class="project-card" data-category="game">
+            <div class="project-card-image">
+                <img src="Projects/Game/index.png" alt="Game Project" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>Game Project</span>';">
+            </div>
+            <div class="project-card-content">
+                <span class="category-tag game">Game</span>
+                <h3>Game</h3>
+                <p>An interactive game project built with JavaScript and HTML5. Click to play and explore the gameplay mechanics.</p>
+            </div>
+        </a>
+        
+        <a href="Projects/TESTProject/TEST.html" class="project-card" data-category="software-development">
+            <div class="project-card-image">
+                <span>TEST Project</span>
+            </div>
+            <div class="project-card-content">
+                <span class="category-tag software-development">Software Development</span>
+                <h3>TEST Project</h3>
+                <p>A test project showcasing web development skills and experimentation with various technologies.</p>
+            </div>
+        </a>
+    </div>
 
 </body>
 <footer>
     <p>&copy; 2025 Zak Levine. All rights reserved.</p>
 </footer>
 <script src="navbar.js"></script>
+<script>
+// Project Category Filter Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const filterValue = this.getAttribute('data-filter');
+            
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            // Filter project cards
+            projectCards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                
+                if (filterValue === 'all' || cardCategory === filterValue) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+    });
+});
+</script>
 </html>
-<!DOCTYPE html>
