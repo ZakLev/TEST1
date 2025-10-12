@@ -3,16 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zak Levine's portfolio website showcasing games, web development projects, and software applications.">
+    <meta name="keywords" content="Zak Levine, portfolio, web development, games, software, projects">
+    <meta name="author" content="Zak Levine">
     <title>Zak Levine Portfolio Site</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Favicon for better branding -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 <body>
-    <div id="navbar-container"></div>
-    <h1>Welcome to Zak Levine's Portfolio</h1>
-    <p>This is a showcase of Zak Levine's work and projects.</p>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="navbar-container" role="navigation" aria-label="Main navigation"></div>
+    <main id="main-content" tabindex="-1">
+        <section class="hero-section">
+            <h1>Welcome to Zak Levine's Portfolio</h1>
+            <p>This is a showcase of Zak Levine's work and projects, featuring innovative web development, interactive games, and cutting-edge software solutions.</p>
+            <nav aria-label="Quick navigation">
+                <a href="projects.html" class="cta-button" aria-describedby="projects-desc">
+                    View Projects
+                </a>
+                <span id="projects-desc" class="sr-only">Browse through various projects including games and web applications</span>
+                <a href="contacts.html" class="cta-button" aria-describedby="contact-desc">
+                    Get in Touch
+                </a>
+                <span id="contact-desc" class="sr-only">Contact Zak Levine for collaborations or inquiries</span>
+            </nav>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Zak Levine. All rights reserved.</p>
+    </footer>
+    
+    <script src="navbar.js"></script>
 </body>
-<footer>
-    <p>&copy; 2025 Zak Levine. All rights reserved.</p>
-</footer>
-<script src="navbar.js"></script>
 </html>

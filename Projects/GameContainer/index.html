@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive game project showcase - Play Zak Levine's Godot-powered game directly in your browser.">
+    <title>Game Container - Zak Levine Portfolio</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        /* Game container specific styles */
+        .game-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .game-frame {
+            width: 100%;
+            height: 650px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .game-controls {
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .control-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .control-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .control-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .game-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .back-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .back-link:hover {
+            background: #5a67d8;
+            text-decoration: none;
+        }
+        
+        .loading-message {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .game-container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .game-frame {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" role="navigation" aria-label="Main navigation"></div>
+    
+    <main class="game-container" role="main">
+        <header class="game-header">
+            <h1>Interactive Game Project</h1>
+            <p>Experience this Godot-powered game built by Zak Levine. Use keyboard controls to navigate and interact.</p>
+        </header>
+        
+        <section class="game-section" aria-label="Game display area">
+            <div class="loading-message" id="loadingMessage" role="status" aria-live="polite">
+                Loading game... Please wait.
+            </div>
+            
+            <iframe 
+                id="gameFrame" 
+                src="Game/index.html" 
+                class="game-frame" 
+                title="Interactive Game - Use keyboard arrows and space to play"
+                aria-label="Embedded game iframe containing interactive Godot game"
+                sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms allow-modals allow-popups"
+                allowfullscreen
+                loading="eager"
+                style="display: none;">
+                <p role="alert">
+                    Your browser does not support embedded games. 
+                    <a href="Game/index.html" aria-label="Open game in new tab">Click here to play the game in a new tab</a>.
+                </p>
+            </iframe>
+            
+            <div class="game-controls" role="toolbar" aria-label="Game control buttons">
+                <button id="reloadBtn" class="control-btn" onclick="reloadGame()" aria-label="Reload game">
+                    🔄 Reload Game
+                </button>
+                <button id="fullscreenBtn" class="control-btn" onclick="toggleFullscreen()" aria-label="Toggle fullscreen mode">
+                    ⛶ Fullscreen
+                </button>
+                <button id="newTabBtn" class="control-btn" onclick="openInNewTab()" aria-label="Open game in new tab">
+                    🔗 New Tab
+                </button>
+                <button id="directPlayBtn" class="control-btn" onclick="openDirectPlay()" aria-label="Play game directly">
+                    🎮 Play Direct
+                </button>
+            </div>
+        </section>
+        
+        <aside class="game-info" role="complementary" aria-label="Game information">
+            <h3>Game Controls & Information</h3>
+            <ul role="list">
+                <li><strong>Movement:</strong> Use arrow keys or WASD to move</li>
+                <li><strong>Interaction:</strong> Use spacebar or mouse click to interact</li>
+                <li><strong>Pause:</strong> Press ESC to pause the game</li>
+                <li><strong>Performance:</strong> Game optimized for desktop and mobile browsers</li>
+            </ul>
+            
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; padding: 10px; margin: 15px 0;">
+                <p><strong>📱 Loading Issues?</strong> Some browsers may restrict embedded games due to security policies. If the game doesn't load properly:</p>
+                <ul>
+                    <li>Try the "Retry Loading" button</li>
+                    <li>Use "New Tab" to open in a separate window</li>
+                    <li>Use "Play Direct" for full-page game experience</li>
+                    <li>Ensure JavaScript is enabled in your browser</li>
+                </ul>
+            </div>
+            
+            <p><strong>About this project:</strong> This interactive game demonstrates advanced web game development using the Godot engine, featuring smooth gameplay mechanics and responsive controls. Built with WebAssembly for optimal performance in modern browsers.</p>
+        </aside>
+        
+        <nav aria-label="Project navigation">
+            <a href="../../projects.html" class="back-link" aria-label="Return to main projects page">
+                ← Back to Projects
+            </a>
+        </nav>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Zak Levine. All rights reserved.</p>
+    </footer>
+    
+    <!-- Load navbar using existing navbar.js -->
+    <script src="../../navbar.js"></script>
+    
+    <script>
+        // Game control functions
+        function reloadGame() {
+            const gameFrame = document.getElementById('gameFrame');
+            const loadingMessage = document.getElementById('loadingMessage');
+            
+            // Show loading message
+            loadingMessage.style.display = 'block';
+            loadingMessage.textContent = 'Reloading game...';
+            gameFrame.style.display = 'none';
+            
+            // Reload the iframe
+            gameFrame.src = gameFrame.src;
+            
+            // Hide loading message after a delay
+            setTimeout(() => {
+                loadingMessage.style.display = 'none';
+                gameFrame.style.display = 'block';
+            }, 2000);
+        }
+        
+        function toggleFullscreen() {
+            const gameFrame = document.getElementById('gameFrame');
+            
+            if (!document.fullscreenElement) {
+                gameFrame.requestFullscreen().catch(err => {
+                    console.error('Error attempting to enable fullscreen:', err);
+                    alert('Fullscreen mode is not supported or blocked by your browser.');
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        function openInNewTab() {
+            window.open('Game/index.html', '_blank', 'noopener,noreferrer');
+        }
+        
+        function openDirectPlay() {
+            // Replace the current page with the game
+            if (confirm('This will navigate directly to the game. You can use the browser back button to return to this page. Continue?')) {
+                window.location.href = 'Game/index.html';
+            }
+        }
+        
+        // Handle iframe loading
+        window.addEventListener('DOMContentLoaded', function() {
+            const gameFrame = document.getElementById('gameFrame');
+            const loadingMessage = document.getElementById('loadingMessage');
+            let loadTimeout;
+            let hasLoaded = false;
+            
+            console.log('GameContainer: Starting to load game...');
+            
+            // Show iframe immediately
+            gameFrame.style.display = 'block';
+            
+            // Set a shorter timeout for initial feedback
+            loadTimeout = setTimeout(() => {
+                if (!hasLoaded) {
+                    console.log('GameContainer: Game taking longer to load, showing options...');
+                    loadingMessage.innerHTML = `
+                        <div role="alert" style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin: 10px 0;">
+                            <p><strong>🎮 Game Loading Options</strong></p>
+                            <p>The game may need a few moments to initialize, or there might be iframe restrictions.</p>
+                            <div style="margin: 15px 0;">
+                                <button onclick="retryLoad()" style="background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">🔄 Retry Loading</button>
+                                <button onclick="openInNewTab()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">🔗 New Tab</button>
+                                <button onclick="openDirectPlay()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">🎮 Direct Play</button>
+                            </div>
+                            <p><small>💡 Tip: "New Tab" often works best for Godot games</small></p>
+                        </div>
+                    `;
+                }
+            }, 3000); // Reduced to 3 seconds
+            
+            // Try to detect when iframe content loads
+            gameFrame.addEventListener('load', function() {
+                console.log('GameContainer: Iframe load event fired');
+                hasLoaded = true;
+                clearTimeout(loadTimeout);
+                
+                // Check if the iframe actually has content
+                setTimeout(() => {
+                    try {
+                        // Try to access iframe document (will fail if cross-origin)
+                        const iframeDoc = gameFrame.contentDocument || gameFrame.contentWindow.document;
+                        if (iframeDoc && iframeDoc.body && iframeDoc.body.innerHTML.trim() !== '') {
+                            console.log('GameContainer: Game content detected, hiding loading message');
+                            loadingMessage.style.display = 'none';
+                        } else {
+                            throw new Error('Empty or inaccessible iframe content');
+                        }
+                    } catch (e) {
+                        // Cross-origin or empty content - assume it's loading
+                        console.log('GameContainer: Cannot access iframe content (normal for cross-origin), assuming game is loading');
+                        loadingMessage.style.display = 'none';
+                    }
+                }, 1000);
+            });
+            
+            // Handle loading errors
+            gameFrame.addEventListener('error', function() {
+                console.log('GameContainer: Iframe error event fired');
+                hasLoaded = true;
+                clearTimeout(loadTimeout);
+                loadingMessage.innerHTML = `
+                    <div role="alert" style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px; padding: 20px; margin: 10px 0;">
+                        <p><strong>❌ Game Loading Failed</strong></p>
+                        <p>The game could not be loaded in this embedded view due to browser security restrictions.</p>
+                        <div style="margin: 15px 0;">
+                            <button onclick="openInNewTab()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">🔗 Open in New Tab</button>
+                            <button onclick="openDirectPlay()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">🎮 Play Directly</button>
+                        </div>
+                        <p><small>💡 These options bypass iframe restrictions and should work properly.</small></p>
+                    </div>
+                `;
+            });
+        });
+        
+        // Retry loading function
+        function retryLoad() {
+            console.log('GameContainer: Retrying game load...');
+            const gameFrame = document.getElementById('gameFrame');
+            const loadingMessage = document.getElementById('loadingMessage');
+            
+            // Show retry message
+            loadingMessage.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <p>🔄 <strong>Retrying game load...</strong></p>
+                    <p>Please wait a moment while we reload the game.</p>
+                </div>
+            `;
+            loadingMessage.style.display = 'block';
+            
+            // Hide iframe temporarily
+            gameFrame.style.display = 'none';
+            
+            // Force complete reload by changing src
+            const originalSrc = gameFrame.src;
+            gameFrame.src = 'about:blank'; // Clear first
+            
+            setTimeout(() => {
+                gameFrame.src = originalSrc + '?reload=' + new Date().getTime(); // Add cache-busting parameter
+                gameFrame.style.display = 'block';
+                
+                // Reset loading detection
+                setTimeout(() => {
+                    // If still showing retry message after 5 seconds, show options again
+                    if (loadingMessage.innerHTML.includes('Retrying game load')) {
+                        loadingMessage.innerHTML = `
+                            <div role="alert" style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin: 10px 0;">
+                                <p><strong>🤔 Still Having Trouble?</strong></p>
+                                <p>The game might not work well in embedded mode. Try these alternatives:</p>
+                                <div style="margin: 15px 0;">
+                                    <button onclick="openInNewTab()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">🔗 New Tab (Recommended)</button>
+                                    <button onclick="openDirectPlay()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">🎮 Direct Play</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }, 5000);
+            }, 1000);
+        }
+        
+        // Keyboard shortcuts for accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey) {
+                switch(e.key) {
+                    case 'r':
+                        e.preventDefault();
+                        reloadGame();
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        toggleFullscreen();
+                        break;
+                    case 'n':
+                        e.preventDefault();
+                        openInNewTab();
+                        break;
+                    case 'd':
+                        e.preventDefault();
+                        openDirectPlay();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

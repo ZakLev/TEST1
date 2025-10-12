@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TEST Project - A demonstration of web development skills and experimental technologies by Zak Levine.">
+    <title>TEST Project - Zak Levine Portfolio</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        /* Override body background but preserve navbar spacing */
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        /* Add top padding to main content to account for navbar */
+        .container {
+            margin-top: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        p {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-link:hover {
+            background: #5a67d8;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" role="navigation" aria-label="Main navigation"></div>
+    
+    <main class="container" role="main">
+        <h1>TEST Project</h1>
+        <p>This is a test project demonstrating web development capabilities and experimental features. This project serves as a sandbox for testing new technologies and implementation approaches.</p>
+        
+        <p>Key features of this project include:</p>
+        <ul role="list">
+            <li>Clean, semantic HTML structure</li>
+            <li>Responsive CSS design</li>
+            <li>Accessibility-focused development</li>
+            <li>Modern web standards implementation</li>
+        </ul>
+        
+        <p>This project represents ongoing experimentation and learning in web development technologies.</p>
+        
+        <nav aria-label="Project navigation">
+            <a href="../../projects.html" class="back-link" aria-label="Return to main projects page">← Back to Projects</a>
+        </nav>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Zak Levine. All rights reserved.</p>
+    </footer>
+    
+    <!-- Load navbar using existing navbar.js -->
+    <script src="../../navbar.js"></script>
+</body>
+</html>

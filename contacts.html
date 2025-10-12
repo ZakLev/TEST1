@@ -3,41 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact</title>
+    <meta name="description" content="Contact Zak Levine through the contact form or email for project inquiries and collaboration opportunities.">
+    <meta name="keywords" content="contact, Zak Levine, email, form, inquiries, collaboration, projects">
+    <title>Contact - Zak Levine Portfolio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="navbar-container"></div>
-    <h1>Contact Zak Levine</h1>
-    <p>If you'd like to get in touch with me, please fill out the form below or reach out via email at Levine.Zak@gmail.com.</p>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="navbar-container" role="navigation" aria-label="Main navigation"></div>
+    <main id="main-content" tabindex="-1">
+        <header class="content-container">
+            <h1>Contact Zak Levine</h1>
+            <p>If you'd like to get in touch with me, please fill out the form below or reach out via email at <a href="mailto:Levine.Zak@gmail.com" aria-label="Send email to Zak Levine">Levine.Zak@gmail.com</a>.</p>
+        </header>
     
-    <div class="contact-form-container">
-        <form class="contact-form" id="contactForm">
+    <section class="contact-form-container" aria-label="Contact form">
+        <form class="contact-form" id="contactForm" novalidate>
             <div class="form-group">
                 <label for="name">Name *</label>
-                <input type="text" id="name" name="name" required>
-                <div class="error-message" id="nameError">Please enter your name.</div>
+                <input type="text" id="name" name="name" required aria-describedby="nameError" aria-invalid="false">
+                <div class="error-message" id="nameError" role="alert" aria-live="polite">Please enter your name.</div>
             </div>
             
             <div class="form-group">
                 <label for="email">Email *</label>
-                <input type="email" id="email" name="email" required>
-                <div class="error-message" id="emailError">Please enter a valid email address.</div>
+                <input type="email" id="email" name="email" required aria-describedby="emailError" aria-invalid="false">
+                <div class="error-message" id="emailError" role="alert" aria-live="polite">Please enter a valid email address.</div>
             </div>
             
             <div class="form-group">
                 <label for="message">Message *</label>
-                <textarea id="message" name="message" placeholder="Enter your message here..." required></textarea>
-                <div class="error-message" id="messageError">Please enter your message.</div>
+                <textarea id="message" name="message" placeholder="Enter your message here..." required aria-describedby="messageError" aria-invalid="false"></textarea>
+                <div class="error-message" id="messageError" role="alert" aria-live="polite">Please enter your message.</div>
             </div>
             
-            <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+            <button type="submit" class="submit-btn" id="submitBtn" aria-describedby="successMessage">Send Message</button>
             
-            <div class="success-message" id="successMessage">
+            <div class="success-message" id="successMessage" role="status" aria-live="polite" aria-atomic="true">
                 Thank you for your message! I'll get back to you as soon as possible.
             </div>
         </form>
-    </div>
+    </section>
+    </main>
 </body>
 <footer>
     <p>&copy; 2025 Zak Levine. All rights reserved.</p>
@@ -99,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function showError(input, errorElement, message) {
         input.classList.remove('valid');
         input.classList.add('invalid');
+        input.setAttribute('aria-invalid', 'true');
         errorElement.textContent = message;
         errorElement.classList.add('show');
     }
@@ -106,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function showValid(input, errorElement) {
         input.classList.remove('invalid');
         input.classList.add('valid');
+        input.setAttribute('aria-invalid', 'false');
         errorElement.classList.remove('show');
     }
 
@@ -156,9 +165,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Reset form
                 form.reset();
                 
-                // Remove validation classes
+                // Remove validation classes and reset aria-invalid
                 [nameInput, emailInput, messageInput].forEach(input => {
                     input.classList.remove('valid', 'invalid');
+                    input.setAttribute('aria-invalid', 'false');
                 });
                 
                 // Re-enable submit button

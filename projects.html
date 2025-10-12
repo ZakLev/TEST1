@@ -3,49 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects</title>
+    <meta name="description" content="Explore Zak Levine's portfolio of games, graphics, AI, and software development projects.">
+    <meta name="keywords" content="Zak Levine, projects, portfolio, games, web development, software, AI, graphics">
+    <title>Projects - Zak Levine Portfolio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="navbar-container"></div>
-    <h1>Projects</h1>
-    <p>Here are some of the projects Zak Levine has worked on:</p>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="navbar-container" role="navigation" aria-label="Main navigation"></div>
+    <main id="main-content" tabindex="-1">
+        <header class="content-container">
+            <h1>Projects</h1>
+            <p>Here are some of the projects Zak Levine has worked on:</p>
+        </header>
     
     <!-- Category Filter Section -->
-    <div class="filter-section">
+    <section class="filter-section" aria-label="Project category filters">
         <div class="filter-title">Filter by Category:</div>
-        <div class="filter-buttons">
-            <button class="filter-btn active" data-filter="all">All Projects</button>
-            <button class="filter-btn" data-filter="game">Game</button>
-            <button class="filter-btn" data-filter="graphics">Graphics</button>
-            <button class="filter-btn" data-filter="ai">AI</button>
-            <button class="filter-btn" data-filter="software-development">Software Development</button>
+        <div class="filter-buttons" role="group" aria-label="Category filter buttons">
+            <button class="filter-btn active" data-filter="all" aria-pressed="true">All Projects</button>
+            <button class="filter-btn" data-filter="game" aria-pressed="false">Game</button>
+            <button class="filter-btn" data-filter="graphics" aria-pressed="false">Graphics</button>
+            <button class="filter-btn" data-filter="ai" aria-pressed="false">AI</button>
+            <button class="filter-btn" data-filter="software-development" aria-pressed="false">Software Development</button>
         </div>
-    </div>
+    </section>
     
-    <div class="projects-container">
-        <a href="Projects/Game/index.html" class="project-card" data-category="game">
+    <section class="projects-container" aria-label="Project portfolio">
+        <a href="Projects/GameContainer/index.html" class="project-card" data-category="game" aria-label="View Game Project">
             <div class="project-card-image">
-                <img src="Projects/Game/index.png" alt="Game Project" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>Game Project</span>';">
+                <img src="Projects/GameContainer/Game/index.png" alt="Screenshot of interactive game project showing gameplay interface" onerror="this.style.display='none'; this.parentNode.innerHTML='<span aria-label=\'Game Project preview image\'>Game Project</span>';">
             </div>
             <div class="project-card-content">
-                <span class="category-tag game">Game</span>
+                <span class="category-tag game" aria-label="Project category: Game">Game</span>
                 <h3>Game</h3>
                 <p>An interactive game project built with JavaScript and HTML5. Click to play and explore the gameplay mechanics.</p>
             </div>
         </a>
         
-        <a href="Projects/TESTProject/TEST.html" class="project-card" data-category="software-development">
+        <a href="Projects/TESTProject/TEST.html" class="project-card" data-category="software-development" aria-label="View TEST Project">
             <div class="project-card-image">
-                <span>TEST Project</span>
+                <span aria-label="TEST Project preview image">TEST Project</span>
             </div>
             <div class="project-card-content">
-                <span class="category-tag software-development">Software Development</span>
+                <span class="category-tag software-development" aria-label="Project category: Software Development">Software Development</span>
                 <h3>TEST Project</h3>
                 <p>A test project showcasing web development skills and experimentation with various technologies.</p>
             </div>
         </a>
-    </div>
+    </section>
+    </main>
 
 </body>
 <footer>
@@ -62,11 +69,15 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const filterValue = this.getAttribute('data-filter');
             
-            // Remove active class from all buttons
-            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Remove active class from all buttons and update aria-pressed
+            filterButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+            });
             
-            // Add active class to clicked button
+            // Add active class to clicked button and update aria-pressed
             this.classList.add('active');
+            this.setAttribute('aria-pressed', 'true');
             
             // Filter project cards
             projectCards.forEach(card => {

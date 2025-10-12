@@ -3,7 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-		<title>Godot Projects</title>
+		<meta name="description" content="Interactive game project built with Godot engine featuring engaging gameplay mechanics.">
+		<title>Godot Game Project - Zak Levine Portfolio</title>
 		<style>
 html, body, #canvas {
 	margin: 0;
@@ -95,18 +96,22 @@ body {
 
 	</head>
 	<body>
-		<canvas id="canvas">
-			Your browser does not support the canvas tag.
-		</canvas>
+		<main role="main" aria-label="Game application">
+			<canvas id="canvas" role="img" aria-label="Game canvas - interactive game display">
+				Your browser does not support the canvas tag. Please upgrade to a modern browser to play this game.
+			</canvas>
+		</main>
 
 		<noscript>
-			Your browser does not support JavaScript.
+			<div role="alert" aria-live="assertive">
+				This game requires JavaScript to function. Please enable JavaScript in your browser settings and refresh the page.
+			</div>
 		</noscript>
 
-		<div id="status">
-			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="index.png" alt="">
-			<progress id="status-progress"></progress>
-			<div id="status-notice"></div>
+		<div id="status" role="status" aria-live="polite" aria-label="Game loading status">
+			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="index.png" alt="Game splash screen showing preview of gameplay">
+			<progress id="status-progress" aria-label="Game loading progress"></progress>
+			<div id="status-notice" role="alert" aria-live="assertive"></div>
 		</div>
 
 		<script src="index.js"></script>
