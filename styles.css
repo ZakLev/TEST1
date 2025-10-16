@@ -528,6 +528,10 @@ a:focus {
     background: linear-gradient(135deg, #5f27cd, #a55eea);
 }
 
+.category-tag.blazor {
+    background: linear-gradient(135deg, #512bd4, #7b2cbf);
+}
+
 /* Project Card Animation for Filtering */
 .project-card {
     transition: all 0.3s ease;

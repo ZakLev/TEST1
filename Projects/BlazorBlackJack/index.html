@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Play Blazor BlackJack - An interactive card game built with Blazor WebAssembly">
+    <meta name="keywords" content="Blazor, BlackJack, Card Game, WebAssembly, C#, Interactive Game">
+    <title>Blazor BlackJack - Zak Levine Portfolio</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .game-description {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .embedded-game-container {
+            width: 100%;
+            min-height: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: white;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+        
+        .embedded-game-frame {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 10px;
+        }
+        
+        .game-controls {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        
+        .refresh-game-btn {
+            background: #667eea;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .refresh-game-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+        
+        .back-to-projects {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-projects:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .game-header {
+                padding: 1.5rem;
+            }
+            
+            .game-description {
+                padding: 1rem;
+            }
+            
+            .game-controls {
+                padding: 1rem;
+            }
+            
+            .embedded-game-frame {
+                height: 500px;
+            }
+            
+            .refresh-game-btn {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+            
+            .tech-stack {
+                gap: 0.5rem;
+            }
+            
+            .tech-badge {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="navbar-container" role="navigation" aria-label="Main navigation"></div>
+    
+    <main id="main-content" tabindex="-1">
+        <div class="game-container">
+            <a href="../../projects.html" class="back-to-projects" aria-label="Back to all projects">
+                ← Back to Projects
+            </a>
+            
+            <div class="game-header">
+                <h1>Blazor BlackJack</h1>
+                <p>Experience the classic card game built with modern web technology</p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Blazor WebAssembly</span>
+                    <span class="tech-badge">Embeddable Component</span>
+                    <span class="tech-badge">C#</span>
+                    <span class="tech-badge">HTML5</span>
+                    <span class="tech-badge">CSS3</span>
+                </div>
+            </div>
+            
+            <div class="game-description">
+                <h2>About This Game</h2>
+                <p>
+                    This BlackJack game showcases the power of Blazor WebAssembly as an embeddable component, 
+                    bringing C# directly into web pages for rich, interactive experiences. The game features 
+                    authentic BlackJack rules, smooth animations, and responsive design that works seamlessly 
+                    embedded within any website.
+                </p>
+                <h3>Features:</h3>
+                <ul>
+                    <li>Embeddable Blazor WebAssembly component</li>
+                    <li>Full BlackJack gameplay with standard rules</li>
+                    <li>Interactive card animations and smooth UI</li>
+                    <li>Responsive design for all screen sizes</li>
+                    <li>Built entirely with Blazor WebAssembly and C#</li>
+                    <li>Seamless integration into existing web pages</li>
+                </ul>
+            </div>
+            
+            <div class="embedded-game-container">
+                <h3 style="text-align: center; padding: 1rem; margin: 0; background: #f8f9fa; border-radius: 10px 10px 0 0;">
+                    🎮 Play BlackJack - Embedded Game
+                </h3>
+                <iframe 
+                    src="BlackJack/index.html" 
+                    class="embedded-game-frame"
+                    id="blackjack-iframe"
+                    title="BlackJack Game"
+                    aria-label="Interactive BlackJack game built with Blazor WebAssembly"
+                    loading="lazy"
+                    sandbox="allow-scripts allow-same-origin allow-forms">
+                    <p>Your browser doesn't support iframes. <a href="BlackJack/index.html" target="_blank">Click here to play the game directly</a>.</p>
+                </iframe>
+            </div>
+            
+            <div class="game-controls">
+                <button class="refresh-game-btn" onclick="refreshGame()" aria-label="Refresh the BlackJack game">
+                    🔄 Refresh Game
+                </button>
+                <a href="BlackJack/index.html" target="_blank" class="refresh-game-btn" style="text-decoration: none; margin-left: 1rem;">
+                    🚀 Open in New Window
+                </a>
+                <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
+                    Try "Open in New Window" if the embedded game doesn't load properly
+                </p>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Zak Levine. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Load navbar.html from the correct relative path for this subdirectory
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('../../navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    // Insert the navbar HTML
+                    document.getElementById('navbar-container').innerHTML = html;
+                    
+                    // Fix the navbar links to work from this subdirectory
+                    const navbarLinks = document.querySelectorAll('#navbar-container a');
+                    navbarLinks.forEach(link => {
+                        const href = link.getAttribute('href');
+                        // Update relative links to point to the correct location
+                        if (href && !href.startsWith('http') && !href.startsWith('#')) {
+                            link.setAttribute('href', '../../' + href);
+                        }
+                    });
+                });
+        });
+        
+        // Function to refresh the embedded Blazor game
+        function refreshGame() {
+            const iframe = document.getElementById('blackjack-iframe');
+            const currentSrc = iframe.src;
+            iframe.src = '';
+            setTimeout(() => {
+                iframe.src = currentSrc;
+            }, 100);
+        }
+        
+        // Handle iframe loading states
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframe = document.getElementById('blackjack-iframe');
+            
+            iframe.addEventListener('load', function() {
+                console.log('BlackJack game loaded successfully');
+            });
+            
+            iframe.addEventListener('error', function() {
+                console.error('Failed to load BlackJack game');
+            });
+        });
+    </script>
+
+</body>
+</html>

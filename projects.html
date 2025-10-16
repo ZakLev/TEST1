@@ -26,6 +26,7 @@
             <button class="filter-btn" data-filter="graphics" aria-pressed="false">Graphics</button>
             <button class="filter-btn" data-filter="ai" aria-pressed="false">AI</button>
             <button class="filter-btn" data-filter="software-development" aria-pressed="false">Software Development</button>
+            <button class="filter-btn" data-filter="blazor" aria-pressed="false">Blazor</button>
         </div>
     </section>
     
@@ -49,6 +50,18 @@
                 <span class="category-tag software-development" aria-label="Project category: Software Development">Software Development</span>
                 <h3>TEST Project</h3>
                 <p>A test project showcasing web development skills and experimentation with various technologies.</p>
+            </div>
+        </a>
+        
+        <a href="Projects/BlazorBlackJack/index.html" class="project-card" data-category="game" aria-label="View Blazor BlackJack Game">
+            <div class="project-card-image">
+                <span aria-label="Blazor BlackJack Game preview image">♠♥ BlackJack ♦♣</span>
+            </div>
+            <div class="project-card-content">
+                <span class="category-tag game" aria-label="Project category: Game">Game</span>
+                <span class="category-tag blazor" aria-label="Technology: Blazor">Blazor</span>
+                <h3>Blazor BlackJack</h3>
+                <p>A fully interactive BlackJack game built with Blazor WebAssembly. Features real card game mechanics, intuitive UI, and smooth gameplay experience.</p>
             </div>
         </a>
     </section>
@@ -82,8 +95,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Filter project cards
             projectCards.forEach(card => {
                 const cardCategory = card.getAttribute('data-category');
+                const categoryTags = card.querySelectorAll('.category-tag');
+                const hasMatchingTag = Array.from(categoryTags).some(tag => 
+                    tag.classList.contains(filterValue)
+                );
                 
-                if (filterValue === 'all' || cardCategory === filterValue) {
+                if (filterValue === 'all' || cardCategory === filterValue || hasMatchingTag) {
                     card.classList.remove('hidden');
                 } else {
                     card.classList.add('hidden');
