@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta name="description" content="Fully accessible BlackJack game with comprehensive screen reader support, keyboard navigation, and cross-device compatibility" />
+    <meta name="keywords" content="blackjack, accessible gaming, screen reader, keyboard navigation, touch friendly" />
+    <meta name="author" content="Accessible BlackJack Game" />
+    
+    <!-- Accessibility Metadata -->
+    <meta name="accessibility-features" content="ARIA, keyboard-navigation, screen-reader-optimized, high-contrast-support, reduced-motion-support" />
+    <meta name="wcag-compliance" content="AA" />
+    
+    <!-- Browser Compatibility -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;" />
+    
+    <title>Accessible BlackJack Game</title>
+    <base href="/" />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/app.css" as="style" />
+    <link rel="preload" href="BlazorApp1.styles.css" as="style" />
+    
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="BlazorApp1.styles.css" rel="stylesheet" />
+    
+    <!-- Skip to main content link -->
+    <style>
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 10000;
+            border-radius: 0 0 4px 4px;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Cross-browser normalization */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        /* Ensure proper focus visibility */
+        :focus-visible {
+            outline: 3px solid #4a90e2;
+            outline-offset: 2px;
+        }
+        
+        /* High contrast mode detection */
+        @media (prefers-contrast: high) {
+            :root {
+                --focus-color: #ffff00;
+                --text-color: #000000;
+                --bg-color: #ffffff;
+            }
+        }
+        
+        /* Reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+        
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            button, .bet-button, .game-button {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .skip-link,
+            .game-controls,
+            .bet-controls {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Skip to main content -->
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    
+    <div id="app">
+        <div style="position: absolute; top: 30%; width: 100%; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <div role="status" aria-live="polite">
+                <h1>Loading Accessible BlackJack Game...</h1>
+                <p>Please wait while the game loads. This application is fully accessible with screen reader support.</p>
+                <div style="display: inline-block; width: 50px; height: 50px; border: 3px solid #f3f3f3; border-top: 3px solid #4a90e2; border-radius: 50%; animation: spin 1s linear infinite; margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <style>
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            
+            @media (prefers-reduced-motion: reduce) {
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(0deg); }
+                }
+            }
+        </style>
+    </div>
+
+    <div id="blazor-error-ui">
+        <div role="alert" aria-live="assertive">
+            <h2>Application Error</h2>
+            <p>An unhandled error has occurred. Please try refreshing the page.</p>
+            <a href="" class="reload" title="Reload the application">Reload</a>
+            <a class="dismiss" title="Dismiss this error message">🗙</a>
+        </div>
+    </div>
+
+    <!-- Polyfills for older browsers -->
+    <script>
+        // Check for and polyfill missing features
+        (function() {
+            // Focus-visible polyfill for older browsers
+            if (!('focus-visible' in document.documentElement.style)) {
+                var script = document.createElement('script');
+                script.src = 'https://unpkg.com/focus-visible@5.2.0/dist/focus-visible.min.js';
+                document.head.appendChild(script);
+            }
+            
+            // Intersection Observer polyfill for IE
+            if (!('IntersectionObserver' in window)) {
+                var script = document.createElement('script');
+                script.src = 'https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver';
+                document.head.appendChild(script);
+            }
+            
+            // Web Animations API polyfill
+            if (!('animate' in document.documentElement)) {
+                var script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/web-animations-js@2.3.2/web-animations.min.js';
+                document.head.appendChild(script);
+            }
+            
+            // Custom Elements polyfill for older browsers
+            if (!('customElements' in window)) {
+                var script = document.createElement('script');
+                script.src = 'https://unpkg.com/@webcomponents/webcomponentsjs@2/webcomponents-loader.js';
+                document.head.appendChild(script);
+            }
+        })();
+        
+        // Service Worker registration for offline support
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+        
+        // Accessibility announcements helper
+        window.announceToScreenReader = function(message) {
+            var announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.className = 'sr-only';
+            announcement.textContent = message;
+            document.body.appendChild(announcement);
+            
+            setTimeout(function() {
+                document.body.removeChild(announcement);
+            }, 1000);
+        };
+        
+        // Keyboard navigation enhancement
+        document.addEventListener('keydown', function(e) {
+            // Alt + S for screen reader help
+            if (e.altKey && e.key.toLowerCase() === 's') {
+                window.announceToScreenReader('Accessible BlackJack Game. Use Tab to navigate, Enter or Space to activate buttons. Game shortcuts: H for Hit, S for Stand, N for New Game.');
+            }
+            
+            // Escape to focus on main content
+            if (e.key === 'Escape') {
+                var mainContent = document.getElementById('main-content') || document.querySelector('main');
+                if (mainContent) {
+                    mainContent.focus();
+                }
+            }
+        });
+        
+        // Touch device detection and optimization
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+            document.body.classList.add('touch-device');
+        }
+        
+        // High contrast mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-contrast: high)').matches) {
+            document.body.classList.add('high-contrast');
+        }
+        
+        // Reduced motion detection
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.body.classList.add('reduced-motion');
+        }
+    </script>
+
+    <script src="_framework/blazor.webassembly.js"></script>
+</body>
+</html>

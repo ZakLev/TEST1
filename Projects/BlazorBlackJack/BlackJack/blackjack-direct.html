@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlackJack Game</title>
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="BlazorApp1.styles.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .game-wrapper {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            color: white;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+            margin: 30px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .loading-subtext {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        
+        #blazor-error-ui {
+            background: #ffebee;
+            border-top: 3px solid #f44336;
+            bottom: 0;
+            box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            left: 0;
+            padding: 1rem 1.5rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            color: #d32f2f;
+            font-weight: 500;
+        }
+        
+        #blazor-error-ui .dismiss {
+            cursor: pointer;
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 18px;
+            background: none;
+            border: none;
+            color: #d32f2f;
+        }
+        
+        #blazor-error-ui .reload {
+            color: #d32f2f;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <div id="blackjack-game">
+            <div class="loading">
+                <div class="loading-text">🃏 Loading BlackJack Game</div>
+                <div class="spinner"></div>
+                <div class="loading-subtext">Initializing game components...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        <strong>⚠️ Game Loading Error</strong><br>
+        An error occurred while loading the BlackJack game.
+        <a href="" class="reload">Click here to reload</a>
+        <button class="dismiss" onclick="document.getElementById('blazor-error-ui').style.display='none'">✕</button>
+    </div>
+
+    <script src="_framework/blazor.webassembly.js"></script>
+    
+    <script>
+        // Add some debug information
+        console.log('BlackJack Direct: Page loaded, waiting for Blazor...');
+        
+        // Monitor loading progress
+        let loadTimeout = setTimeout(() => {
+            const loadingDiv = document.querySelector('.loading');
+            if (loadingDiv && loadingDiv.style.display !== 'none') {
+                console.warn('BlackJack Direct: Game taking longer than expected to load');
+                document.querySelector('.loading-subtext').textContent = 'Still loading... Please wait';
+            }
+        }, 5000);
+        
+        // Clear timeout when Blazor loads
+        window.addEventListener('load', () => {
+            clearTimeout(loadTimeout);
+        });
+        
+        // Handle Blazor startup
+        if (window.Blazor) {
+            console.log('BlackJack Direct: Blazor available');
+        }
+    </script>
+</body>
+</html>

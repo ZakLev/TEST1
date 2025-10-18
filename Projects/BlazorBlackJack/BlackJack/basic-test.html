@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic Server Test</title>
+</head>
+<body>
+    <h1>✅ Server Connection Working</h1>
+    <p>If you can see this page, the HTTP server is working correctly.</p>
+    
+    <h2>Quick Tests:</h2>
+    <ul>
+        <li><a href="standalone-blackjack.html">🎮 Standalone BlackJack (No Blazor)</a></li>
+        <li><a href="css/app.css" target="_blank">📄 CSS File Test</a></li>
+        <li><a href="_framework/blazor.webassembly.js" target="_blank">📄 Blazor JS Test</a></li>
+    </ul>
+    
+    <h2>Server Info:</h2>
+    <p><strong>Current Time:</strong> <span id="time"></span></p>
+    <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
+    
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+        console.log('Basic test page loaded successfully');
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic Test Page</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Basic Connectivity Test</h1>
+    
+    <div class="test-section">
+        <h2>Page Loading Test</h2>
+        <div class="status success">✅ HTML page loaded successfully</div>
+        <div class="status success">✅ CSS styles applied</div>
+        <div class="status info" id="js-status">⏳ Testing JavaScript...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>File Access Test</h2>
+        <div class="status info" id="css-test">⏳ Testing CSS file access...</div>
+        <div class="status info" id="blazor-test">⏳ Testing Blazor file access...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>BlackJack Game Links</h2>
+        <p>Click these links to test different versions:</p>
+        <ul>
+            <li><a href="standalone-blackjack.html" target="_blank">🎮 Standalone BlackJack (No server dependencies)</a></li>
+            <li><a href="embed.html" target="_blank">🎮 Blazor Embed Version</a></li>
+            <li><a href="embedded-game.html" target="_blank">🎮 Alternative Embed Version</a></li>
+            <li><a href="index.html" target="_blank">🎮 Full Blazor App</a></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Output</h2>
+        <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px;" id="console-output">
+            Console messages will appear here...<br>
+        </div>
+    </div>
+
+    <script>
+        const jsStatus = document.getElementById('js-status');
+        const cssTest = document.getElementById('css-test');
+        const blazorTest = document.getElementById('blazor-test');
+        const consoleOutput = document.getElementById('console-output');
+        
+        function log(message) {
+            console.log(message);
+            consoleOutput.innerHTML += new Date().toLocaleTimeString() + ': ' + message + '<br>';
+        }
+        
+        // Test JavaScript
+        jsStatus.className = 'status success';
+        jsStatus.innerHTML = '✅ JavaScript is working';
+        log('JavaScript execution successful');
+        
+        // Test CSS file access
+        fetch('css/app.css')
+            .then(response => {
+                if (response.ok) {
+                    cssTest.className = 'status success';
+                    cssTest.innerHTML = '✅ css/app.css accessible';
+                    log('CSS file access: OK');
+                } else {
+                    cssTest.className = 'status error';
+                    cssTest.innerHTML = '❌ css/app.css not accessible';
+                    log('CSS file access: Failed');
+                }
+            })
+            .catch(err => {
+                cssTest.className = 'status error';
+                cssTest.innerHTML = '❌ css/app.css error: ' + err.message;
+                log('CSS file error: ' + err.message);
+            });
+        
+        // Test Blazor file access
+        fetch('_framework/blazor.webassembly.js')
+            .then(response => {
+                if (response.ok) {
+                    blazorTest.className = 'status success';
+                    blazorTest.innerHTML = '✅ Blazor framework files accessible';
+                    log('Blazor framework access: OK');
+                } else {
+                    blazorTest.className = 'status error';
+                    blazorTest.innerHTML = '❌ Blazor framework files not accessible';
+                    log('Blazor framework access: Failed');
+                }
+            })
+            .catch(err => {
+                blazorTest.className = 'status error';
+                blazorTest.innerHTML = '❌ Blazor framework error: ' + err.message;
+                log('Blazor framework error: ' + err.message);
+            });
+        
+        log('Basic connectivity test completed');
+        
+        // Override console methods to capture all output
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            consoleOutput.innerHTML += new Date().toLocaleTimeString() + ' LOG: ' + args.join(' ') + '<br>';
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            consoleOutput.innerHTML += new Date().toLocaleTimeString() + ' ERROR: ' + args.join(' ') + '<br>';
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            consoleOutput.innerHTML += new Date().toLocaleTimeString() + ' WARN: ' + args.join(' ') + '<br>';
+        };
+    </script>
+</body>
+</html>

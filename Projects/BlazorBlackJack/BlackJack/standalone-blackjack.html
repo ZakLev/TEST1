@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlackJack Game - Standalone</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 30px;
+        }
+        
+        .notice {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .notice h3 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+        
+        .notice p {
+            margin: 5px 0;
+            color: #856404;
+        }
+        
+        .simple-game {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .card {
+            display: inline-block;
+            width: 60px;
+            height: 84px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            margin: 5px;
+            line-height: 80px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .red { color: red; }
+        .black { color: black; }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            min-width: 100px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .score {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px;
+        }
+        
+        .chips {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px;
+        }
+        
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .win { background: #d4edda; color: #155724; }
+        .lose { background: #f8d7da; color: #721c24; }
+        .tie { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 style="text-align: center; color: #333; margin-bottom: 30px;">🃏 BlackJack Game 🃏</h1>
+        
+        <div class="notice">
+            <h3>⚠️ Full Game Requires Web Server</h3>
+            <p>For the complete BlackJack experience with all features, this needs to be served from a web server.</p>
+            <p><strong>Quick Setup:</strong> Place all files in a web folder and access via http://localhost</p>
+            <p>Below is a simplified version that works offline:</p>
+        </div>
+        
+        <div class="simple-game">
+            <h2>Simple BlackJack Demo</h2>
+            <div class="chips" id="chipDisplay">Chips: 100</div>
+            <div>Bet: <span id="betAmount">10</span> 
+                <button onclick="adjustBet(-5)">-5</button>
+                <button onclick="adjustBet(5)">+5</button>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <h3>Dealer (Score: <span id="dealerScore">0</span>)</h3>
+                <div id="dealerCards"></div>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <h3>Player (Score: <span id="playerScore">0</span>)</h3>
+                <div id="playerCards"></div>
+            </div>
+            
+            <div id="gameResult" class="result" style="display: none;"></div>
+            
+            <div style="margin: 20px 0;">
+                <button onclick="startGame()" id="startBtn">Start Game</button>
+                <button onclick="hit()" id="hitBtn" disabled>Hit</button>
+                <button onclick="stand()" id="standBtn" disabled>Stand</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple BlackJack implementation for offline use
+        let deck = [];
+        let playerCards = [];
+        let dealerCards = [];
+        let gameActive = false;
+        let chips = 100;
+        let bet = 10;
+        
+        const suits = ['♠', '♥', '♦', '♣'];
+        const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+        const values = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10];
+        
+        function createDeck() {
+            deck = [];
+            for (let suit of suits) {
+                for (let i = 0; i < ranks.length; i++) {
+                    deck.push({
+                        suit: suit,
+                        rank: ranks[i],
+                        value: values[i],
+                        color: suit === '♥' || suit === '♦' ? 'red' : 'black'
+                    });
+                }
+            }
+            shuffle(deck);
+        }
+        
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        function drawCard() {
+            return deck.pop();
+        }
+        
+        function calculateScore(cards) {
+            let score = 0;
+            let aces = 0;
+            
+            for (let card of cards) {
+                if (card.rank === 'A') {
+                    aces++;
+                }
+                score += card.value;
+            }
+            
+            while (score > 21 && aces > 0) {
+                score -= 10;
+                aces--;
+            }
+            
+            return score;
+        }
+        
+        function displayCards(cards, elementId) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+            
+            for (let card of cards) {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = `card ${card.color}`;
+                cardDiv.textContent = `${card.rank}${card.suit}`;
+                container.appendChild(cardDiv);
+            }
+        }
+        
+        function updateDisplay() {
+            displayCards(playerCards, 'playerCards');
+            displayCards(dealerCards, 'dealerCards');
+            document.getElementById('playerScore').textContent = calculateScore(playerCards);
+            document.getElementById('dealerScore').textContent = calculateScore(dealerCards);
+            document.getElementById('chipDisplay').textContent = `Chips: ${chips}`;
+            document.getElementById('betAmount').textContent = bet;
+        }
+        
+        function adjustBet(amount) {
+            if (!gameActive) {
+                bet = Math.max(5, Math.min(chips, bet + amount));
+                updateDisplay();
+            }
+        }
+        
+        function startGame() {
+            if (chips < bet) {
+                if (chips === 0) {
+                    chips = 10; // Donation!
+                    showResult("🎁 You're broke! Here's 10 chips to keep playing!", 'tie');
+                    updateDisplay();
+                    return;
+                }
+                bet = chips;
+            }
+            
+            chips -= bet;
+            createDeck();
+            playerCards = [drawCard(), drawCard()];
+            dealerCards = [drawCard(), drawCard()];
+            gameActive = true;
+            
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('hitBtn').disabled = false;
+            document.getElementById('standBtn').disabled = false;
+            document.getElementById('gameResult').style.display = 'none';
+            
+            updateDisplay();
+            
+            // Check for blackjack
+            if (calculateScore(playerCards) === 21) {
+                stand();
+            }
+        }
+        
+        function hit() {
+            if (gameActive) {
+                playerCards.push(drawCard());
+                updateDisplay();
+                
+                if (calculateScore(playerCards) > 21) {
+                    endGame('lose', 'Bust! You lose.');
+                } else if (calculateScore(playerCards) === 21) {
+                    stand();
+                }
+            }
+        }
+        
+        function stand() {
+            if (gameActive) {
+                // Dealer draws
+                while (calculateScore(dealerCards) < 17) {
+                    dealerCards.push(drawCard());
+                }
+                
+                updateDisplay();
+                
+                const playerScore = calculateScore(playerCards);
+                const dealerScore = calculateScore(dealerCards);
+                
+                if (dealerScore > 21) {
+                    endGame('win', `Dealer busts! You win ${bet * 2} chips!`);
+                } else if (playerScore > dealerScore) {
+                    endGame('win', `You win ${bet * 2} chips!`);
+                } else if (dealerScore > playerScore) {
+                    endGame('lose', 'Dealer wins.');
+                } else {
+                    endGame('tie', `Tie! Your ${bet} chips are returned.`);
+                }
+            }
+        }
+        
+        function endGame(result, message) {
+            gameActive = false;
+            
+            if (result === 'win') {
+                chips += bet * 2;
+            } else if (result === 'tie') {
+                chips += bet;
+            }
+            
+            showResult(message, result);
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('hitBtn').disabled = true;
+            document.getElementById('standBtn').disabled = true;
+            
+            updateDisplay();
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('gameResult');
+            resultDiv.textContent = message;
+            resultDiv.className = `result ${type}`;
+            resultDiv.style.display = 'block';
+        }
+        
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>

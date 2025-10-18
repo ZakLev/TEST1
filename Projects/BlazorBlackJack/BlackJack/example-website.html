@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino Paradise - Games & Entertainment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f4f4f4;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #ffd700;
+        }
+        
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .cta-button {
+            background: #ffd700;
+            color: #333;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Game Section */
+        .games-section {
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .game-showcase {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        
+        .game-header {
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .game-header h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .game-content {
+            padding: 0;
+        }
+        
+        .game-iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+            display: block;
+        }
+        
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .game-iframe {
+                height: 500px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading-message {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">🎰 Casino Paradise</div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#games">Games</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <h1>🎲 Welcome to Casino Paradise</h1>
+            <p>Experience the thrill of casino games from the comfort of your home!</p>
+            <button class="cta-button" onclick="scrollToGames()">Play Now</button>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🃏</div>
+                <h3>Classic BlackJack</h3>
+                <p>Play the timeless card game with professional-quality graphics and smooth gameplay.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">♿</div>
+                <h3>Accessible Design</h3>
+                <p>Fully accessible with screen reader support and keyboard navigation for all players.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Mobile Friendly</h3>
+                <p>Responsive design that works perfectly on desktop, tablet, and mobile devices.</p>
+            </div>
+        </section>
+
+        <!-- Games Section -->
+        <section id="games" class="games-section">
+            <h2 class="section-title">🎮 Featured Games</h2>
+            
+            <div class="game-showcase">
+                <div class="game-header">
+                    <h3>🃏 BlackJack Game</h3>
+                    <p>Test your skill and luck in this classic card game!</p>
+                    <p><strong>Features:</strong> Betting System • Donation System • Full Accessibility</p>
+                </div>
+                <div class="game-content">
+                    <!-- EMBEDDED BLACKJACK GAME -->
+                    <iframe 
+                        id="blackjackGame"
+                        class="game-iframe" 
+                        src="standalone-blackjack.html"
+                        title="BlackJack Game - Accessible Casino Game"
+                        loading="lazy"
+                        onload="gameLoaded()">
+                        <div class="loading-message">
+                            <div class="spinner"></div>
+                            <p>Loading BlackJack game...</p>
+                            <p>If the game doesn't load, <a href="standalone-blackjack.html" target="_blank">click here to play</a></p>
+                        </div>
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" style="background: white; padding: 40px; border-radius: 15px; margin: 40px 0;">
+            <h2 style="text-align: center; margin-bottom: 30px;">About Our Casino</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                <div>
+                    <h3>🎯 Fair Play</h3>
+                    <p>All our games use certified random number generators to ensure fair and unbiased gameplay.</p>
+                </div>
+                <div>
+                    <h3>🔒 Secure</h3>
+                    <p>Your data and gameplay are completely secure. No personal information is stored or transmitted.</p>
+                </div>
+                <div>
+                    <h3>🎁 Free to Play</h3>
+                    <p>Enjoy unlimited gameplay with our virtual chip system. No real money involved!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h3>🎰 Casino Paradise</h3>
+            <p>The ultimate destination for online casino entertainment</p>
+            <p style="margin-top: 20px; opacity: 0.8;">
+                © 2025 Casino Paradise. All rights reserved. | 
+                <a href="#" style="color: #ffd700;">Privacy Policy</a> | 
+                <a href="#" style="color: #ffd700;">Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling to games section
+        function scrollToGames() {
+            document.getElementById('games').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Game loaded callback
+        function gameLoaded() {
+            console.log('BlackJack game loaded successfully!');
+            
+            // Optional: Add analytics or tracking here
+            // trackEvent('game_loaded', 'blackjack');
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add loading state management
+        window.addEventListener('load', function() {
+            // Ensure the iframe has loaded
+            const iframe = document.getElementById('blackjackGame');
+            if (iframe) {
+                iframe.style.opacity = '0';
+                iframe.style.transition = 'opacity 0.5s ease-in-out';
+                
+                setTimeout(() => {
+                    iframe.style.opacity = '1';
+                }, 100);
+            }
+        });
+
+        // Optional: Add keyboard accessibility for the CTA button
+        document.querySelector('.cta-button').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                scrollToGames();
+            }
+        });
+    </script>
+</body>
+</html>

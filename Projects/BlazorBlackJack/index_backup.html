@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Play Blazor BlackJack - An interactive card game built with Blazor WebAssembly">
+    <meta name="keywords" content="Blazor, BlackJack, Card Game, WebAssembly, C#, Interactive Game">
+    <title>Blazor BlackJack - Zak Levine Portfolio</title>
+    <base href="./BlackJack/" />
+    <link rel="stylesheet" href="../../../styles.css">
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="BlazorApp1.styles.css">
+    <style>
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .game-description {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .blazor-component-container {
+            width: 100%;
+            min-height: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: white;
+            overflow: hidden;
+            margin: 2rem 0;
+            padding: 1rem;
+        }
+        
+        .blazor-app {
+            width: 100%;
+            min-height: 500px;
+        }
+        
+        .loading-progress {
+            display: block;
+            width: 8rem;
+            height: 8rem;
+            margin: 20px auto;
+        }
+        
+        .loading-progress circle {
+            fill: none;
+            stroke: #e0e0e0;
+            stroke-width: 0.6rem;
+            transform-origin: 50% 50%;
+            transform: rotate(-90deg);
+        }
+        
+        .loading-progress circle:last-child {
+            stroke: #1b6ec2;
+            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+            transition: stroke-dasharray 0.05s ease-in-out;
+        }
+        
+        .loading-progress-text {
+            color: #666;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        #blazor-error-ui {
+            background: lightyellow;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: none;
+            padding: 1rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        #blazor-error-ui .dismiss {
+            cursor: pointer;
+            position: absolute;
+            right: 1rem;
+            top: 0.5rem;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+        
+        .back-to-projects {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-projects:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .game-header {
+                padding: 1.5rem;
+            }
+            
+            .game-description {
+                padding: 1rem;
+            }
+            
+            .blazor-component-container {
+                padding: 1rem;
+            }
+            
+            .blazor-app {
+                min-height: 400px;
+            }
+            
+            .tech-stack {
+                gap: 0.5rem;
+            }
+            
+            .tech-badge {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="navbar-container" role="navigation" aria-label="Main navigation"></div>
+    
+    <main id="main-content" tabindex="-1">
+        <div class="game-container">
+            <a href="../../../projects.html" class="back-to-projects" aria-label="Back to all projects">
+                ← Back to Projects
+            </a>
+            
+            <div class="game-header">
+                <h1>Blazor BlackJack</h1>
+                <p>Experience the classic card game built with modern web technology</p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Blazor WebAssembly</span>
+                    <span class="tech-badge">Embeddable Component</span>
+                    <span class="tech-badge">C#</span>
+                    <span class="tech-badge">HTML5</span>
+                    <span class="tech-badge">CSS3</span>
+                </div>
+            </div>
+            
+            <div class="game-description">
+                <h2>About This Game</h2>
+                <p>
+                    This BlackJack game showcases the power of Blazor WebAssembly as an embeddable component, 
+                    bringing C# directly into web pages for rich, interactive experiences. The game features 
+                    authentic BlackJack rules, smooth animations, and responsive design that works seamlessly 
+                    embedded within any website.
+                </p>
+                <h3>Features:</h3>
+                <ul>
+                    <li>Embeddable Blazor WebAssembly component</li>
+                    <li>Full BlackJack gameplay with standard rules</li>
+                    <li>Interactive card animations and smooth UI</li>
+                    <li>Responsive design for all screen sizes</li>
+                    <li>Built entirely with Blazor WebAssembly and C#</li>
+                    <li>Seamless integration into existing web pages</li>
+                </ul>
+            </div>
+            
+            <div class="blazor-component-container">
+                <h3 style="text-align: center; padding: 1rem; margin: 0 0 1rem 0; background: #f8f9fa; border-radius: 10px;">
+                    🎮 Play BlackJack - Direct Component
+                </h3>
+                
+                <div id="blazor-error-ui" style="display: block; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+                    <h4>⚠️ Blazor Component Loading Issue</h4>
+                    <p>The BlackJack component is having trouble loading. This could be due to:</p>
+                    <ul>
+                        <li>Component initialization errors</li>
+                        <li>Missing dependencies</li>
+                        <li>Path configuration issues</li>
+                    </ul>
+                    <div style="margin-top: 1rem;">
+                        <a href="BlackJack/embed.html" target="_blank" style="background: #007bff; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; margin-right: 1rem;">
+                            🚀 Open Game in New Window
+                        </a>
+                        <button onclick="location.reload()" style="background: #28a745; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer;">
+                            🔄 Reload Page
+                        </button>
+                    </div>
+                    <button class="dismiss" onclick="document.getElementById('blazor-error-ui').style.display='none'" style="position: absolute; right: 1rem; top: 0.5rem; background: none; border: none; font-size: 1.2rem; cursor: pointer;">🗙</button>
+                </div>
+                
+                <div id="app" class="blazor-app">
+                    <div style="text-align: center; padding: 2rem;">
+                        <svg class="loading-progress">
+                            <circle r="40%" cx="50%" cy="50%" />
+                            <circle r="40%" cx="50%" cy="50%" />
+                        </svg>
+                        <div class="loading-progress-text">Loading BlackJack Game...</div>
+                        
+                        <!-- Fallback iframe that loads after 5 seconds if Blazor fails -->
+                        <div id="iframe-fallback" style="display: none; margin-top: 2rem;">
+                            <p style="color: #666; margin-bottom: 1rem;">Loading the game in compatibility mode...</p>
+                            <iframe 
+                                src="BlackJack/embed.html" 
+                                style="width: 100%; height: 500px; border: none; border-radius: 8px;"
+                                title="BlackJack Game Fallback">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Zak Levine. All rights reserved.</p>
+    </footer>
+    
+    
+    <!-- Blazor WebAssembly Script -->
+    <script src="_framework/blazor.webassembly.js"></script>
+    
+    <script>
+        // Enhanced Blazor error handling and debugging
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('Blazor BlackJack initialization starting...');
+            console.log('Base href:', document.querySelector('base')?.href || 'No base href set');
+            
+            // Add error event listener for better debugging
+            window.addEventListener('error', function(e) {
+                console.error('JavaScript Error:', e.error);
+                console.error('Error message:', e.message);
+                console.error('Error source:', e.filename, 'Line:', e.lineno);
+            });
+            
+            // Monitor Blazor loading progress
+            if (window.Blazor) {
+                window.Blazor.start().then(() => {
+                    console.log('Blazor started successfully');
+                    document.getElementById('blazor-error-ui').style.display = 'none';
+                }).catch(error => {
+                    console.error('Blazor start failed:', error);
+                    document.getElementById('blazor-error-ui').style.display = 'block';
+                });
+            }
+            
+            // Timeout fallback - if Blazor doesn't load in 10 seconds, show error
+            setTimeout(() => {
+                const loadingElement = document.querySelector('.loading-progress');
+                if (loadingElement && loadingElement.offsetParent !== null) {
+                    console.warn('Blazor loading timeout - showing fallback options');
+                    document.getElementById('blazor-error-ui').style.display = 'block';
+                    
+                    // Show iframe fallback after 5 more seconds
+                    setTimeout(() => {
+                        document.getElementById('iframe-fallback').style.display = 'block';
+                        document.querySelector('.loading-progress')?.parentNode?.removeChild(document.querySelector('.loading-progress'));
+                        const loadingText = document.querySelector('.loading-progress-text');
+                        if (loadingText) loadingText.style.display = 'none';
+                    }, 5000);
+                }
+            }, 10000);
+        });
+    </script>
+    
+    <script>
+        // Load navbar.html from the correct relative path for this subdirectory
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('../../../navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    // Insert the navbar HTML
+                    document.getElementById('navbar-container').innerHTML = html;
+                    
+                    // Fix the navbar links to work from this subdirectory
+                    const navbarLinks = document.querySelectorAll('#navbar-container a');
+                    navbarLinks.forEach(link => {
+                        const href = link.getAttribute('href');
+                        // Update relative links to point to the correct location
+                        if (href && !href.startsWith('http') && !href.startsWith('#')) {
+                            link.setAttribute('href', '../../../' + href);
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Failed to load navbar:', error);
+                });
+        });
+        
+        // Function to refresh the embedded Blazor game
+        function refreshGame() {
+            location.reload();
+        }
+        
+        // Handle Blazor loading states
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('BlackJack Blazor component loading...');
+        });
+    </script>
+
+</body>
+</html>

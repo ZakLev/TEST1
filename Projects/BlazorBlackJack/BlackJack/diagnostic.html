@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blazor Error Diagnostic</title>
+    <style>
+        body {
+            margin: 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background: #2d2d30;
+            border: 1px solid #3e3e42;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        
+        .section h2 {
+            margin-top: 0;
+            color: #569cd6;
+            border-bottom: 1px solid #3e3e42;
+            padding-bottom: 10px;
+        }
+        
+        .status {
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        
+        .success { background: #0e5c0e; color: #4fc3f7; }
+        .error { background: #5c0e0e; color: #f48fb1; }
+        .warning { background: #5c4b0e; color: #ffcc02; }
+        .info { background: #0e2f5c; color: #81d4fa; }
+        
+        .log-output {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        
+        .test-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .test-link {
+            background: #264f78;
+            border: 1px solid #007acc;
+            border-radius: 4px;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #ffffff;
+            transition: background-color 0.2s;
+        }
+        
+        .test-link:hover {
+            background: #1e3a5f;
+        }
+        
+        .blazor-container {
+            border: 2px dashed #569cd6;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 100px;
+            background: rgba(86, 156, 214, 0.1);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #9cdcfe;
+        }
+        
+        .spinner {
+            border: 3px solid #3e3e42;
+            border-top: 3px solid #569cd6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Blazor WebAssembly Diagnostic Tool</h1>
+        
+        <div class="section">
+            <h2>System Status</h2>
+            <div class="status info" id="page-status">✅ Diagnostic page loaded successfully</div>
+            <div class="status info" id="js-status">⏳ Testing JavaScript execution...</div>
+            <div class="status info" id="fetch-status">⏳ Testing HTTP fetch capabilities...</div>
+            <div class="status info" id="wasm-status">⏳ Testing WebAssembly support...</div>
+        </div>
+
+        <div class="section">
+            <h2>Blazor Framework Files</h2>
+            <div class="status info" id="blazor-js">⏳ Checking blazor.webassembly.js...</div>
+            <div class="status info" id="blazor-boot">⏳ Checking blazor.boot.json...</div>
+            <div class="status info" id="dotnet-wasm">⏳ Checking .NET WebAssembly runtime...</div>
+            <div class="status info" id="app-wasm">⏳ Checking application assemblies...</div>
+        </div>
+
+        <div class="section">
+            <h2>Test Blazor Component Loading</h2>
+            <p>This will attempt to load the EmbeddableBlackJack component:</p>
+            <div class="blazor-container">
+                <div id="blackjack-game">
+                    <div class="loading">
+                        <div>Loading BlackJack Test Component...</div>
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="status info" id="component-status">⏳ Attempting to load Blazor component...</div>
+        </div>
+
+        <div class="section">
+            <h2>Error Console</h2>
+            <div class="log-output" id="error-log">Waiting for errors...\n</div>
+        </div>
+
+        <div class="section">
+            <h2>All Console Output</h2>
+            <div class="log-output" id="console-log">Console output will appear here...\n</div>
+        </div>
+
+        <div class="section">
+            <h2>Test Other Pages</h2>
+            <div class="test-links">
+                <a href="standalone-blackjack.html" class="test-link" target="_blank">
+                    🎮 Standalone BlackJack<br>
+                    <small>(No Blazor dependencies)</small>
+                </a>
+                <a href="index.html" class="test-link" target="_blank">
+                    🏠 Main Blazor App<br>
+                    <small>(Full application)</small>
+                </a>
+                <a href="embed.html" class="test-link" target="_blank">
+                    📦 Embed Version<br>
+                    <small>(Embedded component)</small>
+                </a>
+                <a href="embedded-game.html" class="test-link" target="_blank">
+                    🎯 Alternative Embed<br>
+                    <small>(Alternative embed)</small>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Diagnostic variables
+        const elements = {
+            pageStatus: document.getElementById('page-status'),
+            jsStatus: document.getElementById('js-status'),
+            fetchStatus: document.getElementById('fetch-status'),
+            wasmStatus: document.getElementById('wasm-status'),
+            blazorJs: document.getElementById('blazor-js'),
+            blazorBoot: document.getElementById('blazor-boot'),
+            dotnetWasm: document.getElementById('dotnet-wasm'),
+            appWasm: document.getElementById('app-wasm'),
+            componentStatus: document.getElementById('component-status'),
+            errorLog: document.getElementById('error-log'),
+            consoleLog: document.getElementById('console-log')
+        };
+
+        function updateStatus(elementId, success, message) {
+            const element = elements[elementId];
+            if (element) {
+                element.className = `status ${success ? 'success' : 'error'}`;
+                element.textContent = `${success ? '✅' : '❌'} ${message}`;
+            }
+        }
+
+        function logToConsole(type, message) {
+            const timestamp = new Date().toLocaleTimeString();
+            elements.consoleLog.textContent += `[${timestamp}] ${type.toUpperCase()}: ${message}\n`;
+            elements.consoleLog.scrollTop = elements.consoleLog.scrollHeight;
+        }
+
+        function logError(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            elements.errorLog.textContent += `[${timestamp}] ERROR: ${message}\n`;
+            elements.errorLog.scrollTop = elements.errorLog.scrollHeight;
+        }
+
+        // Override console methods to capture all output
+        const originalConsole = {
+            log: console.log,
+            error: console.error,
+            warn: console.warn,
+            info: console.info
+        };
+
+        console.log = function(...args) {
+            originalConsole.log.apply(console, args);
+            logToConsole('log', args.join(' '));
+        };
+
+        console.error = function(...args) {
+            originalConsole.error.apply(console, args);
+            logToConsole('error', args.join(' '));
+            logError(args.join(' '));
+        };
+
+        console.warn = function(...args) {
+            originalConsole.warn.apply(console, args);
+            logToConsole('warn', args.join(' '));
+        };
+
+        console.info = function(...args) {
+            originalConsole.info.apply(console, args);
+            logToConsole('info', args.join(' '));
+        };
+
+        // Capture unhandled errors
+        window.addEventListener('error', function(event) {
+            const message = `${event.message} at ${event.filename}:${event.lineno}:${event.colno}`;
+            logError(`Unhandled Error: ${message}`);
+            console.error('Unhandled Error:', event.error);
+        });
+
+        window.addEventListener('unhandledrejection', function(event) {
+            logError(`Unhandled Promise Rejection: ${event.reason}`);
+            console.error('Unhandled Promise Rejection:', event.reason);
+        });
+
+        // Test JavaScript
+        try {
+            updateStatus('jsStatus', true, 'JavaScript execution working');
+            logToConsole('info', 'JavaScript diagnostic started');
+        } catch (e) {
+            updateStatus('jsStatus', false, `JavaScript error: ${e.message}`);
+            logError(`JavaScript test failed: ${e.message}`);
+        }
+
+        // Test WebAssembly support
+        try {
+            if (typeof WebAssembly === 'object' && typeof WebAssembly.instantiate === 'function') {
+                updateStatus('wasmStatus', true, 'WebAssembly supported');
+                logToConsole('info', 'WebAssembly support confirmed');
+            } else {
+                updateStatus('wasmStatus', false, 'WebAssembly not supported');
+                logError('WebAssembly not supported by this browser');
+            }
+        } catch (e) {
+            updateStatus('wasmStatus', false, `WebAssembly error: ${e.message}`);
+            logError(`WebAssembly test failed: ${e.message}`);
+        }
+
+        // Test fetch capabilities
+        fetch('css/app.css')
+            .then(response => {
+                if (response.ok) {
+                    updateStatus('fetchStatus', true, 'HTTP fetch working');
+                    logToConsole('info', 'HTTP fetch test successful');
+                } else {
+                    updateStatus('fetchStatus', false, `HTTP fetch failed: ${response.status}`);
+                    logError(`HTTP fetch failed with status: ${response.status}`);
+                }
+            })
+            .catch(error => {
+                updateStatus('fetchStatus', false, `Fetch error: ${error.message}`);
+                logError(`Fetch test failed: ${error.message}`);
+            });
+
+        // Test Blazor framework files
+        const frameworkTests = [
+            { id: 'blazorJs', url: '_framework/blazor.webassembly.js', name: 'Blazor WebAssembly JS' },
+            { id: 'blazorBoot', url: '_framework/blazor.boot.json', name: 'Blazor Boot Config' },
+            { id: 'dotnetWasm', url: '_framework/dotnet.js', name: '.NET Runtime JS' },
+            { id: 'appWasm', url: '_framework/BlazorApp1.vo65zxaa44.wasm', name: 'Application Assembly' }
+        ];
+
+        frameworkTests.forEach(test => {
+            fetch(test.url)
+                .then(response => {
+                    if (response.ok) {
+                        updateStatus(test.id, true, `${test.name} accessible`);
+                        logToConsole('info', `${test.name} loaded successfully`);
+                    } else {
+                        updateStatus(test.id, false, `${test.name} failed: ${response.status}`);
+                        logError(`${test.name} failed with status: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    updateStatus(test.id, false, `${test.name} error: ${error.message}`);
+                    logError(`${test.name} failed: ${error.message}`);
+                });
+        });
+
+        // Monitor component loading
+        let componentTimeout = setTimeout(() => {
+            const gameContainer = document.getElementById('blackjack-game');
+            if (gameContainer && gameContainer.innerHTML.includes('Loading BlackJack Test Component')) {
+                updateStatus('componentStatus', false, 'Component failed to load within 15 seconds');
+                logError('Blazor component did not load within expected timeframe');
+            }
+        }, 15000);
+
+        // Monitor for Blazor startup
+        let blazorStarted = false;
+        const checkBlazorStartup = () => {
+            if (window.Blazor && !blazorStarted) {
+                blazorStarted = true;
+                updateStatus('componentStatus', true, 'Blazor runtime started');
+                logToConsole('info', 'Blazor WebAssembly runtime initialized');
+                clearTimeout(componentTimeout);
+            }
+        };
+
+        // Check periodically for Blazor
+        const blazorCheck = setInterval(() => {
+            checkBlazorStartup();
+            if (blazorStarted) {
+                clearInterval(blazorCheck);
+            }
+        }, 100);
+
+        logToConsole('info', 'Diagnostic page initialized - monitoring for errors...');
+    </script>
+
+    <!-- Load Blazor to test component loading -->
+    <script src="_framework/blazor.webassembly.js"></script>
+</body>
+</html>

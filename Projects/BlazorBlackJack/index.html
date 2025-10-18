@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Play Blazor BlackJack - An interactive card game built with Blazor WebAssembly">
-    <meta name="keywords" content="Blazor, BlackJack, Card Game, WebAssembly, C#, Interactive Game">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blazor BlackJack - Zak Levine Portfolio</title>
+    
+    <!-- Portfolio CSS -->
     <link rel="stylesheet" href="../../styles.css">
+    
+    <!-- Game styles will be loaded within the iframe -->
+    
+    <!-- Custom styles -->
     <style>
         .game-container {
             max-width: 1200px;
@@ -31,45 +35,13 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
-        .embedded-game-container {
-            width: 100%;
-            min-height: 600px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        .blazor-component-container {
             background: white;
-            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
             margin: 2rem 0;
-        }
-        
-        .embedded-game-frame {
-            width: 100%;
-            height: 600px;
-            border: none;
-            border-radius: 10px;
-        }
-        
-        .game-controls {
-            text-align: center;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin: 1rem 0;
-        }
-        
-        .refresh-game-btn {
-            background: #667eea;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .refresh-game-btn:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
+            min-height: 600px;
         }
         
         .tech-stack {
@@ -87,15 +59,6 @@
             border-radius: 20px;
             font-size: 0.9rem;
             font-weight: bold;
-        }
-        
-        .loading-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            font-size: 1.2rem;
-            color: #667eea;
         }
         
         .back-to-projects {
@@ -117,6 +80,33 @@
             text-decoration: none;
         }
         
+        #blackjack-game {
+            min-height: 500px;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+
+        
+        .fallback-btn {
+            background: #007bff;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 0.5rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .fallback-btn:hover {
+            background: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
+        
         @media (max-width: 768px) {
             .game-header {
                 padding: 1.5rem;
@@ -126,17 +116,8 @@
                 padding: 1rem;
             }
             
-            .game-controls {
+            .blazor-component-container {
                 padding: 1rem;
-            }
-            
-            .embedded-game-frame {
-                height: 500px;
-            }
-            
-            .refresh-game-btn {
-                padding: 1rem 1.5rem;
-                font-size: 1rem;
             }
             
             .tech-stack {
@@ -147,6 +128,25 @@
                 padding: 0.4rem 0.8rem;
                 font-size: 0.8rem;
             }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Simple loading spinner */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #game-container {
+            transition: all 0.3s ease;
+        }
+        
+        #game-iframe {
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
@@ -191,32 +191,47 @@
                 </ul>
             </div>
             
-            <div class="embedded-game-container">
-                <h3 style="text-align: center; padding: 1rem; margin: 0; background: #f8f9fa; border-radius: 10px 10px 0 0;">
+            <div class="blazor-component-container">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: #333;">
                     🎮 Play BlackJack - Embedded Game
                 </h3>
-                <iframe 
-                    src="BlackJack/index.html" 
-                    class="embedded-game-frame"
-                    id="blackjack-iframe"
-                    title="BlackJack Game"
-                    aria-label="Interactive BlackJack game built with Blazor WebAssembly"
-                    loading="lazy"
-                    sandbox="allow-scripts allow-same-origin allow-forms">
-                    <p>Your browser doesn't support iframes. <a href="BlackJack/index.html" target="_blank">Click here to play the game directly</a>.</p>
-                </iframe>
-            </div>
-            
-            <div class="game-controls">
-                <button class="refresh-game-btn" onclick="refreshGame()" aria-label="Refresh the BlackJack game">
-                    🔄 Refresh Game
-                </button>
-                <a href="BlackJack/index.html" target="_blank" class="refresh-game-btn" style="text-decoration: none; margin-left: 1rem;">
-                    🚀 Open in New Window
-                </a>
-                <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
-                    Try "Open in New Window" if the embedded game doesn't load properly
-                </p>
+                
+                <!-- Embedded BlackJack Game using iframe -->
+                <div id="game-container" style="background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                    <div id="loading-indicator" style="text-align: center; padding: 2rem;">
+                        <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                        <p style="margin-top: 1rem; color: #666;">Loading BlackJack Game...</p>
+                    </div>
+                    
+                    <iframe 
+                        id="game-iframe"
+                        src="BlackJack/embed.html" 
+                        style="width: 100%; height: 700px; border: none; border-radius: 8px; display: none;"
+                        title="BlackJack Game"
+                        onload="hideLoadingIndicator()">
+                    </iframe>
+                </div>
+                
+                <!-- Alternative options -->
+                <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+                    <p style="color: #666; margin-bottom: 0.5rem; font-size: 0.9rem;">Alternative ways to play:</p>
+                    <a href="BlackJack/embedded-game.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem;">
+                        🚀 Embedded Version
+                    </a>
+                    <a href="BlackJack/index.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #28a745;">
+                        🎯 Full Version
+                    </a>
+                    <a href="BlackJack/diagnostic.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #fd7e14; text-decoration: none;">
+                        � Diagnostic Mode
+                    </a>
+                    <a href="BlackJack/standalone-blackjack.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #6f42c1; text-decoration: none;">
+                        🎮 Standalone Version
+                    </a>
+                </div>
+                
+                <footer style="text-align: center; margin-top: 30px; color: #666;">
+                    <p>Powered by Blazor WebAssembly</p>
+                </footer>
             </div>
         </div>
     </main>
@@ -224,51 +239,93 @@
     <footer>
         <p>&copy; 2025 Zak Levine. All rights reserved.</p>
     </footer>
+
+    <!-- Simple JavaScript for iframe management -->
     
     <script>
-        // Load navbar.html from the correct relative path for this subdirectory
+        // Simple iframe management
+        function hideLoadingIndicator() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const gameIframe = document.getElementById('game-iframe');
+            
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            if (gameIframe) {
+                gameIframe.style.display = 'block';
+            }
+            console.log('BlackJack game loaded successfully in iframe');
+        }
+        
+        // Handle iframe loading errors
+        function handleIframeError() {
+            const gameIframe = document.getElementById('game-iframe');
+            if (gameIframe) {
+                // Try fallback to embedded-game.html
+                gameIframe.src = 'BlackJack/embedded-game.html';
+                console.log('Switched to embedded-game.html fallback');
+            }
+        }
+        
+        // Load navbar with correct path resolution
         window.addEventListener('DOMContentLoaded', function() {
+            console.log('Loading navbar from ../../navbar.html');
+            
             fetch('../../navbar.html')
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
                 .then(html => {
-                    // Insert the navbar HTML
                     document.getElementById('navbar-container').innerHTML = html;
+                    console.log('Navbar loaded successfully');
                     
-                    // Fix the navbar links to work from this subdirectory
+                    // Fix navbar links for this subdirectory
                     const navbarLinks = document.querySelectorAll('#navbar-container a');
                     navbarLinks.forEach(link => {
                         const href = link.getAttribute('href');
-                        // Update relative links to point to the correct location
                         if (href && !href.startsWith('http') && !href.startsWith('#')) {
                             link.setAttribute('href', '../../' + href);
                         }
                     });
+                })
+                .catch(error => {
+                    console.error('Failed to load navbar:', error);
+                    // Fallback: create simple navigation
+                    document.getElementById('navbar-container').innerHTML = `
+                        <nav class="top-nav" style="background: #333; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <a href="../../index.html" style="color: white; font-weight: bold; text-decoration: none;">Portfolio</a>
+                            <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 1rem;">
+                                <li><a href="../../index.html" style="color: white; text-decoration: none;">Home</a></li>
+                                <li><a href="../../about.html" style="color: white; text-decoration: none;">About</a></li>
+                                <li><a href="../../projects.html" style="color: white; text-decoration: none;">Projects</a></li>
+                                <li><a href="../../contacts.html" style="color: white; text-decoration: none;">Contact</a></li>
+                                <li><a href="../../socials.html" style="color: white; text-decoration: none;">Socials</a></li>
+                            </ul>
+                        </nav>
+                    `;
                 });
         });
         
-        // Function to refresh the embedded Blazor game
-        function refreshGame() {
-            const iframe = document.getElementById('blackjack-iframe');
-            const currentSrc = iframe.src;
-            iframe.src = '';
-            setTimeout(() => {
-                iframe.src = currentSrc;
-            }, 100);
-        }
-        
-        // Handle iframe loading states
+        // Initialize error UI handlers if they exist
         document.addEventListener('DOMContentLoaded', function() {
-            const iframe = document.getElementById('blackjack-iframe');
+            const dismissBtn = document.querySelector('#blazor-error-ui .dismiss');
+            const reloadBtn = document.querySelector('#blazor-error-ui .reload');
             
-            iframe.addEventListener('load', function() {
-                console.log('BlackJack game loaded successfully');
-            });
-            
-            iframe.addEventListener('error', function() {
-                console.error('Failed to load BlackJack game');
-            });
+            if (dismissBtn) {
+                dismissBtn.addEventListener('click', function () {
+                    document.getElementById("blazor-error-ui").style.display = "none";
+                });
+            }
+
+            if (reloadBtn) {
+                reloadBtn.addEventListener('click', function () {
+                    location.reload();
+                });
+            }
         });
     </script>
-
 </body>
 </html>
