@@ -201,10 +201,12 @@
     </script>
     
     <script>
-        // Dynamic base href detection and CSS loading for GitHub Pages vs local development
+        // Dynamic base href detection and CSS loading for different hosting environments
         (function() {
-            const isGitHubPages = window.location.hostname.includes('github.io');
-            const isLocalDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const hostname = window.location.hostname;
+            const isGitHubPages = hostname.includes('github.io');
+            const isLocalDevelopment = hostname === 'localhost' || hostname === '127.0.0.1';
+            const isCustomDomain = !isGitHubPages && !isLocalDevelopment;
             
             let cssBasePath = '';
             
@@ -219,14 +221,35 @@
             } else if (isGitHubPages) {
                 // For GitHub Pages, ensure correct base href
                 const baseElement = document.querySelector('base');
-                if (baseElement && !baseElement.href.includes('/TEST1/')) {
+                if (baseElement) {
                     baseElement.href = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
                 }
                 cssBasePath = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
                 console.log('GitHub Pages detected, using absolute base href and CSS paths');
+            } else if (isCustomDomain) {
+                // For custom domains (like mrpotatoez.com), check current path structure
+                const currentPath = window.location.pathname;
+                if (currentPath.includes('/TEST1/')) {
+                    // Custom domain with TEST1 path structure
+                    const baseElement = document.querySelector('base');
+                    if (baseElement) {
+                        baseElement.href = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
+                    }
+                    cssBasePath = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
+                    console.log('Custom domain with TEST1 path detected, using absolute base href');
+                } else {
+                    // Custom domain with different path structure
+                    const baseElement = document.querySelector('base');
+                    if (baseElement) {
+                        baseElement.href = '/Projects/BlazorBlackJack/BlackJack/';
+                    }
+                    cssBasePath = '/Projects/BlazorBlackJack/BlackJack/';
+                    console.log('Custom domain detected, using root-based absolute path');
+                }
             } else {
-                // For other environments, use relative paths
+                // Fallback to relative paths
                 cssBasePath = './';
+                console.log('Unknown environment, using relative paths as fallback');
             }
             
             // Load CSS files dynamically
@@ -241,11 +264,8 @@
                 document.head.appendChild(link);
             });
         })();
-    </script>
-    
-    <script src="_framework/blazor.webassembly.js" onerror="handleBlazorLoadError()"></script>
-    
-    <script>
+        
+        // Define Blazor error handler before loading the script
         function handleBlazorLoadError() {
             console.error('Failed to load blazor.webassembly.js');
             const container = document.getElementById('blackjack-game');
@@ -269,6 +289,8 @@
             }
         }
     </script>
+    
+    <script src="_framework/blazor.webassembly.js" onerror="handleBlazorLoadError()"></script>
 </body>
 
 </html>

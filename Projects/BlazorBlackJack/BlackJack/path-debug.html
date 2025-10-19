@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Path Debug Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
+        .debug-section { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #e8f5e8; }
+        .error { background: #ffebee; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Custom Domain Path Debug Tool</h1>
+    
+    <div class="debug-section">
+        <h3>Current Environment</h3>
+        <div id="env-info">Loading...</div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Path Tests</h3>
+        <div id="path-tests">Testing...</div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Recommended Configuration</h3>
+        <div id="recommendations">Analyzing...</div>
+    </div>
+
+    <script>
+        function analyzeEnvironment() {
+            const hostname = window.location.hostname;
+            const pathname = window.location.pathname;
+            const fullURL = window.location.href;
+            
+            const isGitHubPages = hostname.includes('github.io');
+            const isLocalDevelopment = hostname === 'localhost' || hostname === '127.0.0.1';
+            const isCustomDomain = !isGitHubPages && !isLocalDevelopment;
+            
+            let environmentType = 'Unknown';
+            if (isLocalDevelopment) environmentType = 'Local Development';
+            else if (isGitHubPages) environmentType = 'GitHub Pages';
+            else if (isCustomDomain) environmentType = 'Custom Domain';
+            
+            document.getElementById('env-info').innerHTML = `
+                <strong>Hostname:</strong> ${hostname}<br>
+                <strong>Full URL:</strong> ${fullURL}<br>
+                <strong>Pathname:</strong> ${pathname}<br>
+                <strong>Environment Type:</strong> ${environmentType}<br>
+                <strong>Has /TEST1/ in path:</strong> ${pathname.includes('/TEST1/') ? 'Yes' : 'No'}<br>
+                <strong>Current Base Href:</strong> ${document.querySelector('base')?.href || 'None'}
+            `;
+            
+            return { hostname, pathname, isCustomDomain, isGitHubPages, isLocalDevelopment };
+        }
+        
+        async function testPaths(env) {
+            const testPaths = [];
+            
+            // Generate different path combinations to test
+            if (env.pathname.includes('/TEST1/')) {
+                testPaths.push({
+                    name: 'With /TEST1/ prefix',
+                    blazor: '/TEST1/Projects/BlazorBlackJack/BlackJack/_framework/blazor.webassembly.js',
+                    css: '/TEST1/Projects/BlazorBlackJack/BlackJack/css/app.css'
+                });
+            }
+            
+            testPaths.push({
+                name: 'Without /TEST1/ prefix',
+                blazor: '/Projects/BlazorBlackJack/BlackJack/_framework/blazor.webassembly.js',
+                css: '/Projects/BlazorBlackJack/BlackJack/css/app.css'
+            });
+            
+            testPaths.push({
+                name: 'Relative paths',
+                blazor: './_framework/blazor.webassembly.js',
+                css: './css/app.css'
+            });
+            
+            let results = '';
+            for (const pathSet of testPaths) {
+                results += `<h4>${pathSet.name}:</h4><ul>`;
+                
+                // Test Blazor JS
+                try {
+                    const blazorResponse = await fetch(pathSet.blazor, { method: 'HEAD' });
+                    const blazorStatus = blazorResponse.ok ? 'success' : 'error';
+                    results += `<li class="${blazorStatus}">Blazor JS: ${blazorResponse.ok ? '✅' : '❌'} ${pathSet.blazor}</li>`;
+                } catch (e) {
+                    results += `<li class="error">Blazor JS: ❌ Error - ${pathSet.blazor}</li>`;
+                }
+                
+                // Test CSS
+                try {
+                    const cssResponse = await fetch(pathSet.css, { method: 'HEAD' });
+                    const cssStatus = cssResponse.ok ? 'success' : 'error';
+                    results += `<li class="${cssStatus}">CSS: ${cssResponse.ok ? '✅' : '❌'} ${pathSet.css}</li>`;
+                } catch (e) {
+                    results += `<li class="error">CSS: ❌ Error - ${pathSet.css}</li>`;
+                }
+                
+                results += '</ul>';
+            }
+            
+            document.getElementById('path-tests').innerHTML = results;
+        }
+        
+        function generateRecommendations(env) {
+            let recommendations = '';
+            
+            if (env.isCustomDomain) {
+                if (env.pathname.includes('/TEST1/')) {
+                    recommendations = `
+                        <p><strong>Recommended Configuration for Custom Domain with /TEST1/ path:</strong></p>
+                        <code>&lt;base href="/TEST1/Projects/BlazorBlackJack/BlackJack/" /&gt;</code>
+                        <p>Your custom domain appears to preserve the GitHub Pages path structure.</p>
+                    `;
+                } else {
+                    recommendations = `
+                        <p><strong>Recommended Configuration for Custom Domain without /TEST1/ path:</strong></p>
+                        <code>&lt;base href="/Projects/BlazorBlackJack/BlackJack/" /&gt;</code>
+                        <p>Your custom domain appears to serve from the root without the repository name.</p>
+                    `;
+                }
+            } else if (env.isGitHubPages) {
+                recommendations = `
+                    <p><strong>GitHub Pages Configuration:</strong></p>
+                    <code>&lt;base href="/TEST1/Projects/BlazorBlackJack/BlackJack/" /&gt;</code>
+                `;
+            } else if (env.isLocalDevelopment) {
+                recommendations = `
+                    <p><strong>Local Development Configuration:</strong></p>
+                    <code>&lt;base href="./" /&gt;</code>
+                `;
+            }
+            
+            document.getElementById('recommendations').innerHTML = recommendations;
+        }
+        
+        async function runDiagnostics() {
+            const env = analyzeEnvironment();
+            await testPaths(env);
+            generateRecommendations(env);
+        }
+        
+        document.addEventListener('DOMContentLoaded', runDiagnostics);
+    </script>
+</body>
+</html>
