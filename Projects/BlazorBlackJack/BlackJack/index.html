@@ -135,11 +135,8 @@
                 `;
             }
         }
-    </script>
-    
-    <script src="_framework/blazor.webassembly.js" onerror="tryAlternativeFrameworkPath()"></script>
-    
-    <script>
+        
+        // Define tryAlternativeFrameworkPath before the script tag
         function tryAlternativeFrameworkPath() {
             console.warn('🔄 _framework path failed, trying alternative framework path...');
             const script = document.createElement('script');
@@ -153,6 +150,24 @@
             };
             document.head.appendChild(script);
         }
+        
+        // Load Blazor script dynamically after base href is set
+        function loadBlazorScript() {
+            console.log('🚀 Loading Blazor script dynamically...');
+            const script = document.createElement('script');
+            script.src = '_framework/blazor.webassembly.js';
+            script.onerror = function() {
+                console.warn('🔄 _framework path failed, trying alternative framework path...');
+                tryAlternativeFrameworkPath();
+            };
+            script.onload = function() {
+                console.log('✅ Blazor script loaded successfully!');
+            };
+            document.head.appendChild(script);
+        }
+        
+        // Load the script after a short delay to ensure base href is set
+        setTimeout(loadBlazorScript, 100);
     </script>
 </body>
 

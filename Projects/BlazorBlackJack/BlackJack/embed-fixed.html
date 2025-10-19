@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Embeddable BlackJack Game - Fixed</title>
+    <base href="/Projects/BlazorBlackJack/BlackJack/" />
+    <!-- CSS will be loaded dynamically based on environment -->
+</head>
+
+<body>
+    <!-- Only the BlackJack game container, no #app container -->
+    <div id="blackjack-game">
+        <!-- Blazor will replace this content -->
+        <div style="text-align: center; padding: 2rem;">
+            <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <p style="margin-top: 1rem; color: #666;">Loading BlackJack Game...</p>
+        </div>
+    </div>
+
+    <style>
+        /* Essential styles for embedded game */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        #blackjack-game {
+            min-height: 400px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Blazor error UI styles */
+        #blazor-error-ui {
+            background: lightyellow;
+            bottom: 0;
+            box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+            display: none;
+            left: 0;
+            padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        #blazor-error-ui .dismiss {
+            cursor: pointer;
+            position: absolute;
+            right: 0.75rem;
+            top: 0.5rem;
+        }
+    </style>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script>
+        // Simple approach: detect mrpotatoez.com and use framework path directly
+        (function() {
+            const hostname = window.location.hostname;
+            
+            if (hostname === 'www.mrpotatoez.com' || hostname === 'mrpotatoez.com') {
+                console.log('🌍 mrpotatoez.com detected - using framework/ path to avoid underscore issues');
+                
+                // Load CSS files
+                const cssFiles = ['css/app.css', 'BlazorApp1.styles.css'];
+                cssFiles.forEach(cssFile => {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = cssFile;
+                    document.head.appendChild(link);
+                });
+                
+                // Load Blazor script from framework/ directory (no underscore)
+                const script = document.createElement('script');
+                script.src = 'framework/blazor.webassembly.js';
+                script.onload = function() {
+                    console.log('✅ Blazor loaded successfully from framework/ path!');
+                };
+                script.onerror = function() {
+                    console.error('❌ Failed to load from framework/ path');
+                    showError();
+                };
+                document.head.appendChild(script);
+                
+            } else {
+                console.log('🏠 Non-mrpotatoez.com environment - using standard _framework/ path');
+                
+                // For other environments, use standard approach
+                const baseElement = document.querySelector('base');
+                if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                    baseElement.href = './';
+                }
+                
+                // Load CSS files
+                const cssFiles = ['css/app.css', 'BlazorApp1.styles.css'];
+                cssFiles.forEach(cssFile => {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = cssFile;
+                    document.head.appendChild(link);
+                });
+                
+                // Load standard Blazor script
+                const script = document.createElement('script');
+                script.src = '_framework/blazor.webassembly.js';
+                script.onload = function() {
+                    console.log('✅ Blazor loaded successfully from _framework/ path!');
+                };
+                script.onerror = function() {
+                    console.error('❌ Failed to load from _framework/ path');
+                    showError();
+                };
+                document.head.appendChild(script);
+            }
+        })();
+        
+        function showError() {
+            const container = document.getElementById('blackjack-game');
+            if (container) {
+                container.innerHTML = `
+                    <div style="padding: 20px; background: #ffebee; border: 1px solid #f44336; border-radius: 4px; text-align: center;">
+                        <h3>🚫 Blazor Loading Error</h3>
+                        <p>The Blazor WebAssembly framework failed to load.</p>
+                        <p><strong>Detected Environment:</strong> ${window.location.hostname}</p>
+                        <p><strong>Attempted Path:</strong> ${window.location.hostname.includes('mrpotatoez.com') ? 'framework/' : '_framework/'}</p>
+                        <br>
+                        <a href="../standalone-blackjack.html" style="display: inline-block; padding: 10px 20px; background: #2196F3; color: white; text-decoration: none; border-radius: 4px;">
+                            Try Standalone Version
+                        </a>
+                    </div>
+                `;
+            }
+        }
+        
+        // Blazor debugging
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, Blazor container found:', document.getElementById('blackjack-game') !== null);
+        });
+
+        window.blazorCulture = {
+            get: () => "en-US",
+            set: () => {}
+        };
+    </script>
+</body>
+
+</html>
