@@ -75,25 +75,14 @@
                 cssBasePath = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
                 console.log('GitHub Pages detected, using absolute base href and CSS paths');
             } else if (isCustomDomain) {
-                // For custom domains (like mrpotatoez.com), check current path structure
-                const currentPath = window.location.pathname;
-                if (currentPath.includes('/TEST1/')) {
-                    // Custom domain with TEST1 path structure
-                    const baseElement = document.querySelector('base');
-                    if (baseElement) {
-                        baseElement.href = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
-                    }
-                    cssBasePath = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
-                    console.log('Custom domain with TEST1 path detected, using absolute base href');
-                } else {
-                    // Custom domain with different path structure
-                    const baseElement = document.querySelector('base');
-                    if (baseElement) {
-                        baseElement.href = '/Projects/BlazorBlackJack/BlackJack/';
-                    }
-                    cssBasePath = '/Projects/BlazorBlackJack/BlackJack/';
-                    console.log('Custom domain detected, using root-based absolute path');
+                // For custom domains (like mrpotatoez.com)
+                // Since URL is mrpotatoez.com/Projects/..., we don't need /TEST1/
+                const baseElement = document.querySelector('base');
+                if (baseElement) {
+                    baseElement.href = '/Projects/BlazorBlackJack/BlackJack/';
                 }
+                cssBasePath = '/Projects/BlazorBlackJack/BlackJack/';
+                console.log('Custom domain detected (mrpotatoez.com), using root-based absolute path without TEST1');
             } else {
                 // Fallback to relative paths
                 cssBasePath = './';

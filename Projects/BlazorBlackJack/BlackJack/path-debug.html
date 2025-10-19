@@ -58,25 +58,45 @@
         async function testPaths(env) {
             const testPaths = [];
             
-            // Generate different path combinations to test
-            if (env.pathname.includes('/TEST1/')) {
+            // For mrpotatoez.com, test the specific paths we expect
+            if (env.hostname === 'www.mrpotatoez.com' || env.hostname === 'mrpotatoez.com') {
                 testPaths.push({
-                    name: 'With /TEST1/ prefix',
+                    name: 'Custom Domain (mrpotatoez.com) - Expected Paths',
+                    blazor: '/Projects/BlazorBlackJack/BlackJack/_framework/blazor.webassembly.js',
+                    css: '/Projects/BlazorBlackJack/BlackJack/css/app.css',
+                    component: '/Projects/BlazorBlackJack/BlackJack/BlazorApp1.styles.css'
+                });
+                
+                testPaths.push({
+                    name: 'Wrong Path (with TEST1 - should fail)',
                     blazor: '/TEST1/Projects/BlazorBlackJack/BlackJack/_framework/blazor.webassembly.js',
-                    css: '/TEST1/Projects/BlazorBlackJack/BlackJack/css/app.css'
+                    css: '/TEST1/Projects/BlazorBlackJack/BlackJack/css/app.css',
+                    component: '/TEST1/Projects/BlazorBlackJack/BlackJack/BlazorApp1.styles.css'
+                });
+            } else {
+                // Generate different path combinations to test
+                if (env.pathname.includes('/TEST1/')) {
+                    testPaths.push({
+                        name: 'With /TEST1/ prefix',
+                        blazor: '/TEST1/Projects/BlazorBlackJack/BlackJack/_framework/blazor.webassembly.js',
+                        css: '/TEST1/Projects/BlazorBlackJack/BlackJack/css/app.css',
+                        component: '/TEST1/Projects/BlazorBlackJack/BlackJack/BlazorApp1.styles.css'
+                    });
+                }
+                
+                testPaths.push({
+                    name: 'Without /TEST1/ prefix',
+                    blazor: '/Projects/BlazorBlackJack/BlackJack/_framework/blazor.webassembly.js',
+                    css: '/Projects/BlazorBlackJack/BlackJack/css/app.css',
+                    component: '/Projects/BlazorBlackJack/BlackJack/BlazorApp1.styles.css'
                 });
             }
             
             testPaths.push({
-                name: 'Without /TEST1/ prefix',
-                blazor: '/Projects/BlazorBlackJack/BlackJack/_framework/blazor.webassembly.js',
-                css: '/Projects/BlazorBlackJack/BlackJack/css/app.css'
-            });
-            
-            testPaths.push({
                 name: 'Relative paths',
                 blazor: './_framework/blazor.webassembly.js',
-                css: './css/app.css'
+                css: './css/app.css',
+                component: './BlazorApp1.styles.css'
             });
             
             let results = '';
@@ -101,6 +121,15 @@
                     results += `<li class="error">CSS: ❌ Error - ${pathSet.css}</li>`;
                 }
                 
+                // Test Component CSS
+                try {
+                    const componentResponse = await fetch(pathSet.component, { method: 'HEAD' });
+                    const componentStatus = componentResponse.ok ? 'success' : 'error';
+                    results += `<li class="${componentStatus}">Component CSS: ${componentResponse.ok ? '✅' : '❌'} ${pathSet.component}</li>`;
+                } catch (e) {
+                    results += `<li class="error">Component CSS: ❌ Error - ${pathSet.component}</li>`;
+                }
+                
                 results += '</ul>';
             }
             
@@ -110,7 +139,15 @@
         function generateRecommendations(env) {
             let recommendations = '';
             
-            if (env.isCustomDomain) {
+            if (env.hostname === 'www.mrpotatoez.com' || env.hostname === 'mrpotatoez.com') {
+                recommendations = `
+                    <p><strong>✅ Configuration for mrpotatoez.com:</strong></p>
+                    <code>&lt;base href="/Projects/BlazorBlackJack/BlackJack/" /&gt;</code>
+                    <p><strong>❌ Do NOT use:</strong> <code>/TEST1/Projects/...</code></p>
+                    <p>Your custom domain serves directly from the root without the GitHub repository name.</p>
+                    <p><strong>Expected Blazor JS Path:</strong> <code>/Projects/BlazorBlackJack/BlackJack/_framework/blazor.webassembly.js</code></p>
+                `;
+            } else if (env.isCustomDomain) {
                 if (env.pathname.includes('/TEST1/')) {
                     recommendations = `
                         <p><strong>Recommended Configuration for Custom Domain with /TEST1/ path:</strong></p>
