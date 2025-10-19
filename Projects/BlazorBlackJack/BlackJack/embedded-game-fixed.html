@@ -86,14 +86,14 @@
                     document.head.appendChild(link);
                 });
                 
-                // Load Blazor from framework/ directory
+                // Load Blazor from framework/ directory using the path-corrected version
                 const script = document.createElement('script');
-                script.src = 'framework/blazor.webassembly.js';
+                script.src = 'framework/blazor.webassembly.fixed.js';
                 script.onload = function() {
-                    console.log('✅ Blazor loaded from framework/ directory');
+                    console.log('✅ Blazor loaded from corrected framework/ directory');
                 };
                 script.onerror = function() {
-                    console.error('❌ Failed to load Blazor from framework/ directory');
+                    console.error('❌ Failed to load Blazor from corrected framework/ directory');
                     // Show error in the loading container
                     const loadingDiv = document.querySelector('.loading');
                     if (loadingDiv) {
