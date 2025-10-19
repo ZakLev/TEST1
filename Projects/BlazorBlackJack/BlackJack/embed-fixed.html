@@ -70,12 +70,61 @@
     </div>
 
     <script>
-        // Simple approach: detect mrpotatoez.com and use framework path directly
+        // Comprehensive solution: Intercept all _framework requests and redirect to framework
         (function() {
             const hostname = window.location.hostname;
+            const currentURL = window.location.href;
+            
+            console.log('🔍 embed-fixed.html Debug Info:', { 
+                hostname, 
+                currentURL,
+                baseBefore: document.querySelector('base')?.href 
+            });
             
             if (hostname === 'www.mrpotatoez.com' || hostname === 'mrpotatoez.com') {
-                console.log('🌍 mrpotatoez.com detected - using framework/ path to avoid underscore issues');
+                console.log('🌍 mrpotatoez.com detected - intercepting _framework requests');
+                
+                // Ensure base href is correct for mrpotatoez.com (no TEST1)
+                const baseElement = document.querySelector('base');
+                if (baseElement) {
+                    baseElement.href = '/Projects/BlazorBlackJack/BlackJack/';
+                    console.log('📍 Base href updated to:', baseElement.href);
+                }
+                
+                // Intercept fetch requests to redirect _framework to framework
+                const originalFetch = window.fetch;
+                window.fetch = function(resource, options) {
+                    if (typeof resource === 'string' && resource.includes('_framework/')) {
+                        const newResource = resource.replace('_framework/', 'framework/');
+                        console.log('🔄 Redirecting fetch:', resource, '→', newResource);
+                        return originalFetch(newResource, options);
+                    }
+                    return originalFetch(resource, options);
+                };
+                
+                // Intercept XMLHttpRequest for older browsers/scripts
+                const originalXHROpen = XMLHttpRequest.prototype.open;
+                XMLHttpRequest.prototype.open = function(method, url, ...args) {
+                    if (typeof url === 'string' && url.includes('_framework/')) {
+                        const newUrl = url.replace('_framework/', 'framework/');
+                        console.log('🔄 Redirecting XHR:', url, '→', newUrl);
+                        url = newUrl;
+                    }
+                    return originalXHROpen.call(this, method, url, ...args);
+                };
+                
+                // Intercept dynamic imports
+                const originalImport = window.import || function() {};
+                if (window.import) {
+                    window.import = function(module) {
+                        if (typeof module === 'string' && module.includes('_framework/')) {
+                            const newModule = module.replace('_framework/', 'framework/');
+                            console.log('🔄 Redirecting import:', module, '→', newModule);
+                            return originalImport(newModule);
+                        }
+                        return originalImport(module);
+                    };
+                }
                 
                 // Load CSS files
                 const cssFiles = ['css/app.css', 'BlazorApp1.styles.css'];
@@ -83,6 +132,12 @@
                     const link = document.createElement('link');
                     link.rel = 'stylesheet';
                     link.href = cssFile;
+                    link.onload = function() {
+                        console.log('✅ CSS loaded:', cssFile);
+                    };
+                    link.onerror = function() {
+                        console.warn('❌ CSS failed:', cssFile);
+                    };
                     document.head.appendChild(link);
                 });
                 
@@ -94,6 +149,7 @@
                 };
                 script.onerror = function() {
                     console.error('❌ Failed to load from framework/ path');
+                    console.error('Attempted URL:', script.src);
                     showError();
                 };
                 document.head.appendChild(script);
@@ -105,6 +161,7 @@
                 const baseElement = document.querySelector('base');
                 if (hostname === 'localhost' || hostname === '127.0.0.1') {
                     baseElement.href = './';
+                    console.log('📍 Base href set to relative for localhost:', baseElement.href);
                 }
                 
                 // Load CSS files
@@ -113,6 +170,12 @@
                     const link = document.createElement('link');
                     link.rel = 'stylesheet';
                     link.href = cssFile;
+                    link.onload = function() {
+                        console.log('✅ CSS loaded:', cssFile);
+                    };
+                    link.onerror = function() {
+                        console.warn('❌ CSS failed:', cssFile);
+                    };
                     document.head.appendChild(link);
                 });
                 
@@ -124,6 +187,7 @@
                 };
                 script.onerror = function() {
                     console.error('❌ Failed to load from _framework/ path');
+                    console.error('Attempted URL:', script.src);
                     showError();
                 };
                 document.head.appendChild(script);
@@ -146,6 +210,12 @@
                     </div>
                 `;
             }
+        }
+        
+        // Alias for compatibility with existing code
+        function handleBlazorLoadError() {
+            console.error('handleBlazorLoadError called - delegating to showError');
+            showError();
         }
         
         // Blazor debugging
