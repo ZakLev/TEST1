@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlackJack Game - Embedded Fixed</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #blazor-error-ui {
+            background: lightyellow;
+            bottom: 0;
+            box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+            display: none;
+            left: 0;
+            padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        #blazor-error-ui .dismiss {
+            cursor: pointer;
+            position: absolute;
+            right: 0.75rem;
+            top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Only the BlackJack game container, no #app container -->
+    <div id="blackjack-game">
+        <div class="loading">
+            <p>Loading BlackJack Game...</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script>
+        // Simple detection and resource loading for GitHub Pages underscore workaround
+        (function() {
+            const hostname = window.location.hostname;
+            console.log('🎮 Embedded Game Fixed - Host:', hostname);
+            
+            if (hostname === 'www.mrpotatoez.com' || hostname === 'mrpotatoez.com') {
+                console.log('🌍 Loading from framework/ directory (GitHub Pages fix)');
+                
+                // Load CSS files first
+                const cssFiles = ['css/app.css', 'BlazorApp1.styles.css'];
+                cssFiles.forEach(cssFile => {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = cssFile;
+                    document.head.appendChild(link);
+                });
+                
+                // Load Blazor from framework/ directory
+                const script = document.createElement('script');
+                script.src = 'framework/blazor.webassembly.js';
+                script.onload = function() {
+                    console.log('✅ Blazor loaded from framework/ directory');
+                };
+                script.onerror = function() {
+                    console.error('❌ Failed to load Blazor from framework/ directory');
+                    // Show error in the loading container
+                    const loadingDiv = document.querySelector('.loading');
+                    if (loadingDiv) {
+                        loadingDiv.innerHTML = '<p style="color: red;">Failed to load game. Please try refreshing the page.</p>';
+                    }
+                };
+                document.head.appendChild(script);
+                
+            } else {
+                console.log('🏠 Loading from standard _framework/ directory');
+                
+                // Load CSS files first
+                const cssFiles = ['css/app.css', 'BlazorApp1.styles.css'];
+                cssFiles.forEach(cssFile => {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = cssFile;
+                    document.head.appendChild(link);
+                });
+                
+                // Load standard Blazor script
+                const script = document.createElement('script');
+                script.src = '_framework/blazor.webassembly.js';
+                script.onload = function() {
+                    console.log('✅ Blazor loaded from _framework/ directory');
+                };
+                script.onerror = function() {
+                    console.error('❌ Failed to load Blazor from _framework/ directory');
+                    const loadingDiv = document.querySelector('.loading');
+                    if (loadingDiv) {
+                        loadingDiv.innerHTML = '<p style="color: red;">Failed to load game. Please try refreshing the page.</p>';
+                    }
+                };
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
+</body>
+</html>

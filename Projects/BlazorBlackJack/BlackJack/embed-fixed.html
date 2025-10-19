@@ -70,7 +70,7 @@
     </div>
 
     <script>
-        // Comprehensive solution: Intercept all _framework requests and redirect to framework
+        // Ultimate solution: Modify Blazor configuration before it loads
         (function() {
             const hostname = window.location.hostname;
             const currentURL = window.location.href;
@@ -82,7 +82,7 @@
             });
             
             if (hostname === 'www.mrpotatoez.com' || hostname === 'mrpotatoez.com') {
-                console.log('🌍 mrpotatoez.com detected - intercepting _framework requests');
+                console.log('🌍 mrpotatoez.com detected - using Blazor config override approach');
                 
                 // Ensure base href is correct for mrpotatoez.com (no TEST1)
                 const baseElement = document.querySelector('base');
@@ -90,52 +90,6 @@
                     baseElement.href = '/Projects/BlazorBlackJack/BlackJack/';
                     console.log('📍 Base href updated to:', baseElement.href);
                 }
-                
-                // Intercept fetch requests to redirect _framework to framework
-                const originalFetch = window.fetch;
-                window.fetch = function(resource, options) {
-                    if (typeof resource === 'string' && resource.includes('_framework/')) {
-                        const newResource = resource.replace(/_framework\//g, 'framework/');
-                        console.log('🔄 Fetch redirect:', resource, '→', newResource);
-                        return originalFetch(newResource, options);
-                    }
-                    return originalFetch(resource, options);
-                };
-                
-                // Intercept XMLHttpRequest for older browsers/scripts
-                const originalXHROpen = XMLHttpRequest.prototype.open;
-                XMLHttpRequest.prototype.open = function(method, url, ...args) {
-                    if (typeof url === 'string' && url.includes('_framework/')) {
-                        const newUrl = url.replace(/_framework\//g, 'framework/');
-                        console.log('🔄 XHR redirect:', url, '→', newUrl);
-                        url = newUrl;
-                    }
-                    return originalXHROpen.call(this, method, url, ...args);
-                };
-                
-                // Intercept dynamic imports - handle ES6 module imports
-                const originalImport = window.import;
-                if (originalImport) {
-                    window.import = function(module) {
-                        if (typeof module === 'string' && module.includes('_framework/')) {
-                            const newModule = module.replace(/_framework\//g, 'framework/');
-                            console.log('🔄 Import redirect:', module, '→', newModule);
-                            return originalImport(newModule);
-                        }
-                        return originalImport(module);
-                    };
-                }
-                
-                // Most importantly: Override import() function used by modern JS modules
-                const originalEval = window.eval;
-                window.eval = function(code) {
-                    if (typeof code === 'string' && code.includes('_framework/')) {
-                        const newCode = code.replace(/_framework\//g, 'framework/');
-                        console.log('🔄 Eval redirect detected and replaced');
-                        return originalEval(newCode);
-                    }
-                    return originalEval(code);
-                };
                 
                 // Load CSS files
                 const cssFiles = ['css/app.css', 'BlazorApp1.styles.css'];
@@ -152,44 +106,48 @@
                     document.head.appendChild(link);
                 });
                 
-                // Load Blazor script from framework/ directory (no underscore)
+                // CRITICAL: Override the framework path BEFORE Blazor loads
+                window.Blazor = window.Blazor || {};
+                window.Blazor.start = window.Blazor.start || function(options) {
+                    console.log('🔧 Blazor.start called with custom config override');
+                    
+                    // Override the loadBootResource function to redirect paths
+                    const customOptions = {
+                        ...options,
+                        loadBootResource: function(type, name, defaultUri, integrity) {
+                            // Redirect any _framework paths to framework paths
+                            if (defaultUri && defaultUri.includes('_framework/')) {
+                                const newUri = defaultUri.replace(/_framework\//g, 'framework/');
+                                console.log('🔄 Boot resource redirect:', defaultUri, '→', newUri);
+                                return newUri;
+                            }
+                            return defaultUri;
+                        }
+                    };
+                    
+                    // Call the original start function if it exists
+                    if (originalBlazorStart) {
+                        return originalBlazorStart(customOptions);
+                    }
+                    
+                    // Store the options for when the real Blazor loads
+                    window._blazorStartOptions = customOptions;
+                };
+                
+                // Store reference to original start function
+                let originalBlazorStart = null;
+                
+                // Load Blazor script from framework/ directory
                 const script = document.createElement('script');
                 script.src = 'framework/blazor.webassembly.js';
                 script.onload = function() {
                     console.log('✅ Blazor loaded successfully from framework/ path!');
                     
-                    // After Blazor loads, add additional interceptors
-                    setTimeout(() => {
-                        // Intercept any late-binding Blazor methods
-                        if (window.Blazor && window.Blazor._internal) {
-                            console.log('🔧 Applying post-load Blazor path corrections');
-                            
-                            // Patch any resource loading functions that might have been defined
-                            const patchFunction = (obj, funcName) => {
-                                if (obj[funcName] && typeof obj[funcName] === 'function') {
-                                    const original = obj[funcName];
-                                    obj[funcName] = function(...args) {
-                                        // Convert any _framework paths in arguments to framework paths
-                                        const newArgs = args.map(arg => {
-                                            if (typeof arg === 'string' && arg.includes('_framework/')) {
-                                                const newArg = arg.replace(/_framework\//g, 'framework/');
-                                                console.log(`🔄 ${funcName} arg redirect:`, arg, '→', newArg);
-                                                return newArg;
-                                            }
-                                            return arg;
-                                        });
-                                        return original.apply(this, newArgs);
-                                    };
-                                }
-                            };
-                            
-                            // Patch common Blazor functions that might load resources
-                            const blazorInternal = window.Blazor._internal;
-                            ['loadBootResource', 'invokeMethodAsync', 'invokeDotNetFromJS'].forEach(funcName => {
-                                patchFunction(blazorInternal, funcName);
-                            });
-                        }
-                    }, 100);
+                    // After Blazor loads, if we have stored options, use them
+                    if (window._blazorStartOptions && window.Blazor.start !== window.Blazor.start) {
+                        console.log('� Starting Blazor with custom options');
+                        window.Blazor.start(window._blazorStartOptions);
+                    }
                 };
                 script.onerror = function() {
                     console.error('❌ Failed to load from framework/ path');
