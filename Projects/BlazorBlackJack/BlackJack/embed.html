@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Embeddable BlackJack Game</title>
-    <link href="css/app.css" rel="stylesheet" />
-    <link href="BlazorApp1.styles.css" rel="stylesheet" />
+    <base href="/TEST1/Projects/BlazorBlackJack/BlackJack/" />
+    <!-- CSS will be loaded dynamically based on environment -->
 </head>
 
 <body>
@@ -16,6 +16,7 @@
     </div>
 
     <style>
+        /* Essential styles for embedded game */
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -28,6 +29,15 @@
             background-color: #f5f5f5;
         }
         
+        #blackjack-game {
+            min-height: 400px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Blazor error UI styles */
         #blazor-error-ui {
             background: lightyellow;
             bottom: 0;
@@ -38,6 +48,7 @@
             position: fixed;
             width: 100%;
             z-index: 1000;
+            box-sizing: border-box;
         }
 
         #blazor-error-ui .dismiss {
@@ -45,6 +56,86 @@
             position: absolute;
             right: 0.75rem;
             top: 0.5rem;
+        }
+        
+        /* Basic button styles */
+        .btn {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            margin-bottom: 0;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        
+        .btn-secondary {
+            color: #fff;
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        
+        .btn-success {
+            color: #fff;
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        
+        .btn-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        /* Card game specific styles */
+        .card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            margin: 0.25rem;
+            display: inline-block;
+            text-align: center;
+            font-weight: bold;
+            min-width: 60px;
+            min-height: 80px;
+            padding: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+        
+        .game-area {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .player-area, .dealer-area {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
         }
     </style>
 
@@ -109,7 +200,75 @@
         });
     </script>
     
-    <script src="_framework/blazor.webassembly.js"></script>
+    <script>
+        // Dynamic base href detection and CSS loading for GitHub Pages vs local development
+        (function() {
+            const isGitHubPages = window.location.hostname.includes('github.io');
+            const isLocalDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            
+            let cssBasePath = '';
+            
+            if (isLocalDevelopment) {
+                // For local development, use relative path
+                const baseElement = document.querySelector('base');
+                if (baseElement) {
+                    baseElement.href = './';
+                }
+                cssBasePath = './';
+                console.log('Local development detected, using relative base href and CSS paths');
+            } else if (isGitHubPages) {
+                // For GitHub Pages, ensure correct base href
+                const baseElement = document.querySelector('base');
+                if (baseElement && !baseElement.href.includes('/TEST1/')) {
+                    baseElement.href = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
+                }
+                cssBasePath = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
+                console.log('GitHub Pages detected, using absolute base href and CSS paths');
+            } else {
+                // For other environments, use relative paths
+                cssBasePath = './';
+            }
+            
+            // Load CSS files dynamically
+            const cssFiles = ['css/app.css', 'BlazorApp1.styles.css'];
+            cssFiles.forEach(cssFile => {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = cssBasePath + cssFile;
+                link.onerror = function() {
+                    console.warn(`Failed to load CSS: ${cssFile}`);
+                };
+                document.head.appendChild(link);
+            });
+        })();
+    </script>
+    
+    <script src="_framework/blazor.webassembly.js" onerror="handleBlazorLoadError()"></script>
+    
+    <script>
+        function handleBlazorLoadError() {
+            console.error('Failed to load blazor.webassembly.js');
+            const container = document.getElementById('blackjack-game');
+            if (container) {
+                container.innerHTML = `
+                    <div style="padding: 20px; background: #ffebee; border: 1px solid #f44336; border-radius: 4px; text-align: center;">
+                        <h3>🚫 Blazor Loading Error</h3>
+                        <p>The Blazor WebAssembly framework failed to load.</p>
+                        <p><strong>This may be due to:</strong></p>
+                        <ul style="text-align: left; display: inline-block;">
+                            <li>Missing or incorrect base href configuration</li>
+                            <li>CORS restrictions on GitHub Pages</li>
+                            <li>Network connectivity issues</li>
+                        </ul>
+                        <br>
+                        <a href="../standalone-blackjack.html" style="display: inline-block; padding: 10px 20px; background: #2196F3; color: white; text-decoration: none; border-radius: 4px;">
+                            Try Standalone Version
+                        </a>
+                    </div>
+                `;
+            }
+        }
+    </script>
 </body>
 
 </html>
