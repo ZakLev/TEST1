@@ -67,6 +67,22 @@
                     component: '/Projects/BlazorBlackJack/BlackJack/BlazorApp1.styles.css'
                 });
                 
+                // Test if the _framework directory itself is accessible
+                testPaths.push({
+                    name: 'Test _framework directory access',
+                    blazor: '/Projects/BlazorBlackJack/BlackJack/_framework/',
+                    css: '/Projects/BlazorBlackJack/BlackJack/_framework/blazor.boot.json',
+                    component: '/Projects/BlazorBlackJack/BlackJack/_framework/dotnet.js'
+                });
+                
+                // Test URL encoded underscore
+                testPaths.push({
+                    name: 'URL Encoded underscore (%5F)',
+                    blazor: '/Projects/BlazorBlackJack/BlackJack/%5Fframework/blazor.webassembly.js',
+                    css: '/Projects/BlazorBlackJack/BlackJack/css/app.css',
+                    component: '/Projects/BlazorBlackJack/BlackJack/BlazorApp1.styles.css'
+                });
+                
                 testPaths.push({
                     name: 'Wrong Path (with TEST1 - should fail)',
                     blazor: '/TEST1/Projects/BlazorBlackJack/BlackJack/_framework/blazor.webassembly.js',
@@ -107,27 +123,30 @@
                 try {
                     const blazorResponse = await fetch(pathSet.blazor, { method: 'HEAD' });
                     const blazorStatus = blazorResponse.ok ? 'success' : 'error';
-                    results += `<li class="${blazorStatus}">Blazor JS: ${blazorResponse.ok ? '✅' : '❌'} ${pathSet.blazor}</li>`;
+                    const blazorDetails = blazorResponse.ok ? `✅ (${blazorResponse.status})` : `❌ (${blazorResponse.status} ${blazorResponse.statusText})`;
+                    results += `<li class="${blazorStatus}">Blazor JS: ${blazorDetails} ${pathSet.blazor}</li>`;
                 } catch (e) {
-                    results += `<li class="error">Blazor JS: ❌ Error - ${pathSet.blazor}</li>`;
+                    results += `<li class="error">Blazor JS: ❌ Network Error - ${pathSet.blazor}</li>`;
                 }
                 
                 // Test CSS
                 try {
                     const cssResponse = await fetch(pathSet.css, { method: 'HEAD' });
                     const cssStatus = cssResponse.ok ? 'success' : 'error';
-                    results += `<li class="${cssStatus}">CSS: ${cssResponse.ok ? '✅' : '❌'} ${pathSet.css}</li>`;
+                    const cssDetails = cssResponse.ok ? `✅ (${cssResponse.status})` : `❌ (${cssResponse.status} ${cssResponse.statusText})`;
+                    results += `<li class="${cssStatus}">CSS: ${cssDetails} ${pathSet.css}</li>`;
                 } catch (e) {
-                    results += `<li class="error">CSS: ❌ Error - ${pathSet.css}</li>`;
+                    results += `<li class="error">CSS: ❌ Network Error - ${pathSet.css}</li>`;
                 }
                 
                 // Test Component CSS
                 try {
                     const componentResponse = await fetch(pathSet.component, { method: 'HEAD' });
                     const componentStatus = componentResponse.ok ? 'success' : 'error';
-                    results += `<li class="${componentStatus}">Component CSS: ${componentResponse.ok ? '✅' : '❌'} ${pathSet.component}</li>`;
+                    const componentDetails = componentResponse.ok ? `✅ (${componentResponse.status})` : `❌ (${componentResponse.status} ${componentResponse.statusText})`;
+                    results += `<li class="${componentStatus}">Component/Other: ${componentDetails} ${pathSet.component}</li>`;
                 } catch (e) {
-                    results += `<li class="error">Component CSS: ❌ Error - ${pathSet.component}</li>`;
+                    results += `<li class="error">Component/Other: ❌ Network Error - ${pathSet.component}</li>`;
                 }
                 
                 results += '</ul>';

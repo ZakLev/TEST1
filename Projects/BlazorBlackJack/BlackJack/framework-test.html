@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Framework Directory Test</title>
+</head>
+<body>
+    <h1>Testing _framework Directory Access</h1>
+    <div id="results">Testing...</div>
+    
+    <script>
+        async function testFrameworkAccess() {
+            const results = document.getElementById('results');
+            let output = '<h3>Test Results:</h3><ul>';
+            
+            // Test different variations
+            const testPaths = [
+                '/Projects/BlazorBlackJack/BlackJack/_framework/',
+                '/Projects/BlazorBlackJack/BlackJack/_framework/blazor.boot.json',
+                '/Projects/BlazorBlackJack/BlackJack/_framework/blazor.webassembly.js',
+                '/Projects/BlazorBlackJack/BlackJack/%5Fframework/blazor.webassembly.js', // URL encoded
+                './_framework/',
+                './_framework/blazor.boot.json',
+                './_framework/blazor.webassembly.js'
+            ];
+            
+            for (const path of testPaths) {
+                try {
+                    const response = await fetch(path, { method: 'HEAD' });
+                    const status = response.ok ? '✅' : '❌';
+                    output += `<li>${status} ${path} (${response.status} ${response.statusText})</li>`;
+                } catch (error) {
+                    output += `<li>❌ ${path} (Error: ${error.message})</li>`;
+                }
+            }
+            
+            output += '</ul>';
+            
+            // Additional debug info
+            output += `<h3>Environment Info:</h3>`;
+            output += `<p><strong>URL:</strong> ${window.location.href}</p>`;
+            output += `<p><strong>Host:</strong> ${window.location.hostname}</p>`;
+            output += `<p><strong>Path:</strong> ${window.location.pathname}</p>`;
+            
+            results.innerHTML = output;
+        }
+        
+        document.addEventListener('DOMContentLoaded', testFrameworkAccess);
+    </script>
+</body>
+</html>

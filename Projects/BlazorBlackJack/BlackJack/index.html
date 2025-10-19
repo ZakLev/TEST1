@@ -137,7 +137,23 @@
         }
     </script>
     
-    <script src="_framework/blazor.webassembly.js" onerror="handleBlazorLoadError()"></script>
+    <script src="_framework/blazor.webassembly.js" onerror="tryAlternativeFrameworkPath()"></script>
+    
+    <script>
+        function tryAlternativeFrameworkPath() {
+            console.warn('🔄 _framework path failed, trying alternative framework path...');
+            const script = document.createElement('script');
+            script.src = 'framework/blazor.webassembly.js';
+            script.onerror = function() {
+                console.error('❌ Both _framework and framework paths failed');
+                handleBlazorLoadError();
+            };
+            script.onload = function() {
+                console.log('✅ Alternative framework path worked!');
+            };
+            document.head.appendChild(script);
+        }
+    </script>
 </body>
 
 </html>
