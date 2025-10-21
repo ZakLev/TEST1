@@ -100,6 +100,22 @@
     text-align: center;
     color: white;
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    /* Align deck section with dealer's hand on wide screens */
+    margin-top: 60px; /* Approximate height of game instructions + spacing to align with dealer section */
+}
+
+/* For wider screens, ensure proper alignment */
+@media (min-width: 900px) {
+    .blackjack-embedded .deck-section[b-hq04ultgve] {
+        margin-top: 80px; /* Fine-tuned alignment with dealer section top */
+    }
+}
+
+/* For very wide screens, optimize alignment further */
+@media (min-width: 1200px) {
+    .blackjack-embedded .deck-section[b-hq04ultgve] {
+        margin-top: 85px; /* Precise alignment for large screens */
+    }
 }
 
 .blackjack-embedded .deck-section h3[b-hq04ultgve],
@@ -707,6 +723,7 @@
         flex: none;
         width: 100%;
         order: -1;
+        margin-top: 0; /* Reset margin-top for mobile/narrow screens */
     }
     
     .blackjack-embedded .main-game-area[b-hq04ultgve] {
