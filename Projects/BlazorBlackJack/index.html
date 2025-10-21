@@ -148,6 +148,30 @@
         #game-iframe {
             transition: opacity 0.3s ease;
         }
+        
+        /* Fullscreen styles */
+        .fullscreen-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .fullscreen-container.is-fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            background: white;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .fullscreen-container.is-fullscreen #game-iframe {
+            width: 100%;
+            height: calc(100vh - 40px);
+        }
     </style>
 </head>
 <body>
@@ -205,30 +229,24 @@
                     
                     <iframe 
                         id="game-iframe"
-                        src="BlackJack/embedded-game-fixed.html?v=2" 
-                        style="width: 100%; height: 700px; border: none; border-radius: 8px; display: none;"
+                        src="BlackJack/embedded-game-fixed.html?v=4" 
+                        style="width: 100%; height: 500px; border: none; border-radius: 8px; display: none;"
                         title="BlackJack Game"
                         onload="hideLoadingIndicator()">
                     </iframe>
                 </div>
                 
-                <!-- Alternative options -->
+                <!-- Game Controls & Alternative Options -->
                 <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
-                    <p style="color: #666; margin-bottom: 0.5rem; font-size: 0.9rem;">Alternative ways to play:</p>
-                    <a href="BlackJack/embed-fixed.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #4caf50;">
-                        🎯 Fixed Embed (mrpotatoez.com)
-                    </a>
-                    <a href="BlackJack/embedded-game.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem;">
-                        🚀 Embedded Version
-                    </a>
-                    <a href="BlackJack/index.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #28a745;">
-                        🎯 Full Version
-                    </a>
-                    <a href="BlackJack/framework-test.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #ff5722; text-decoration: none;">
-                        🧪 Framework Test
-                    </a>
-                    <a href="BlackJack/path-debug.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #fd7e14; text-decoration: none;">
-                        🔧 Path Debug Tool
+                    <p style="color: #666; margin-bottom: 0.5rem; font-size: 0.9rem;">Game Controls & Options:</p>
+                    <button onclick="reloadGame()" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #28a745; border: none; cursor: pointer;">
+                        🔄 Reload Game
+                    </button>
+                    <button onclick="toggleFullscreen()" id="fullscreen-btn" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #007bff; border: none; cursor: pointer;">
+                        📱 Fullscreen
+                    </button>
+                    <a href="BlackJack/embedded-game-fixed.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem;">
+                        � Open in New Tab
                     </a>
                     <a href="BlackJack/standalone-blackjack.html" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #6f42c1; text-decoration: none;">
                         🎮 Standalone Version
@@ -330,6 +348,115 @@
                 reloadBtn.addEventListener('click', function () {
                     location.reload();
                 });
+            }
+        });
+        
+        // Game control functions
+        function reloadGame() {
+            console.log('🔄 Reloading game...');
+            
+            const gameIframe = document.getElementById('game-iframe');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            
+            // Show loading indicator and hide iframe
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'block';
+                loadingIndicator.innerHTML = `
+                    <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 1rem; color: #666;">Reloading BlackJack Game...</p>
+                `;
+            }
+            
+            if (gameIframe) {
+                gameIframe.style.display = 'none';
+                // Reload the iframe by changing its src
+                const currentSrc = gameIframe.src;
+                const url = new URL(currentSrc);
+                const currentVersion = url.searchParams.get('v') || '4';
+                const newVersion = parseInt(currentVersion) + 1;
+                url.searchParams.set('v', newVersion.toString());
+                gameIframe.src = url.toString();
+                
+                // The onload event will hide the loading indicator
+            }
+        }
+        
+        function toggleFullscreen() {
+            const container = document.getElementById('game-container');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            
+            if (!container.classList.contains('is-fullscreen')) {
+                // Enter fullscreen
+                container.classList.add('is-fullscreen');
+                fullscreenBtn.innerHTML = '📱 Exit Fullscreen';
+                fullscreenBtn.title = 'Exit Fullscreen';
+                
+                // Try to use native fullscreen API if available
+                if (container.requestFullscreen) {
+                    container.requestFullscreen().catch(err => {
+                        console.log('Fullscreen API not available, using CSS fullscreen');
+                    });
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                
+                console.log('🎮 Entered fullscreen mode');
+            } else {
+                // Exit fullscreen
+                container.classList.remove('is-fullscreen');
+                fullscreenBtn.innerHTML = '📱 Fullscreen';
+                fullscreenBtn.title = 'Toggle Fullscreen';
+                
+                // Exit native fullscreen if active
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(err => {
+                        console.log('Exiting CSS fullscreen only');
+                    });
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                
+                console.log('🎮 Exited fullscreen mode');
+            }
+        }
+        
+        // Handle native fullscreen changes
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+        
+        function handleFullscreenChange() {
+            const container = document.getElementById('game-container');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                // Native fullscreen was exited
+                container.classList.remove('is-fullscreen');
+                if (fullscreenBtn) {
+                    fullscreenBtn.innerHTML = '📱 Fullscreen';
+                    fullscreenBtn.title = 'Toggle Fullscreen';
+                }
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // F11 for fullscreen toggle
+            if (event.key === 'F11') {
+                event.preventDefault();
+                toggleFullscreen();
+            }
+            
+            // Escape to exit fullscreen
+            if (event.key === 'Escape') {
+                const container = document.getElementById('game-container');
+                if (container && container.classList.contains('is-fullscreen')) {
+                    toggleFullscreen();
+                }
             }
         });
     </script>

@@ -4,12 +4,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-    <meta name="description" content="Accessible BlackJack Game - Fully compliant with WCAG 2.1 AA standards" />
+    <meta name="description" content="BlackJack Game - Fully compliant with WCAG 2.1 AA standards" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Accessible BlackJack Game</title>
-    <base href="/TEST1/Projects/BlazorBlackJack/BlackJack/" />
+    <title>BlackJack Game</title>
+    <base href="/" />
     
-    <!-- CSS will be loaded dynamically based on environment -->
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/app.css" as="style" />
+    <link rel="preload" href="BlazorApp1.styles.css" as="style" />
+    
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="BlazorApp1.styles.css" rel="stylesheet" />
     
     <style>
         /* Skip link */
@@ -35,140 +42,14 @@
 
 <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
-    <div id="app" role="application">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
-    </div>
+    <div id="blackjack-game"></div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="." class="reload">Reload</a>
         <span class="dismiss">🗙</span>
     </div>
-    <script>
-        // Dynamic base href detection and CSS loading for different hosting environments
-        (function() {
-            const hostname = window.location.hostname;
-            const isGitHubPages = hostname.includes('github.io');
-            const isLocalDevelopment = hostname === 'localhost' || hostname === '127.0.0.1';
-            const isCustomDomain = !isGitHubPages && !isLocalDevelopment;
-            
-            let cssBasePath = '';
-            
-            if (isLocalDevelopment) {
-                // For local development, use relative path
-                const baseElement = document.querySelector('base');
-                if (baseElement) {
-                    baseElement.href = './';
-                }
-                cssBasePath = './';
-                console.log('Local development detected, using relative base href and CSS paths');
-            } else if (isGitHubPages) {
-                // For GitHub Pages, ensure correct base href
-                const baseElement = document.querySelector('base');
-                if (baseElement) {
-                    baseElement.href = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
-                }
-                cssBasePath = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
-                console.log('GitHub Pages detected, using absolute base href and CSS paths');
-            } else if (isCustomDomain) {
-                // For custom domains (like mrpotatoez.com)
-                // Since URL is mrpotatoez.com/Projects/..., we don't need /TEST1/
-                const baseElement = document.querySelector('base');
-                if (baseElement) {
-                    baseElement.href = '/Projects/BlazorBlackJack/BlackJack/';
-                }
-                cssBasePath = '/Projects/BlazorBlackJack/BlackJack/';
-                console.log('Custom domain detected (mrpotatoez.com), using root-based absolute path without TEST1');
-            } else {
-                // Fallback to relative paths
-                cssBasePath = './';
-                console.log('Unknown environment, using relative paths as fallback');
-            }
-            
-            // Load CSS files dynamically
-            const cssFiles = ['lib/bootstrap/dist/css/bootstrap.min.css', 'css/app.css', 'BlazorApp1.styles.css'];
-            cssFiles.forEach(cssFile => {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = cssBasePath + cssFile;
-                link.onerror = function() {
-                    console.warn(`Failed to load CSS: ${cssFile}`);
-                };
-                document.head.appendChild(link);
-            });
-            
-            // Load favicon
-            const favicon = document.createElement('link');
-            favicon.rel = 'icon';
-            favicon.type = 'image/png';
-            favicon.href = cssBasePath + 'favicon.png';
-            document.head.appendChild(favicon);
-        })();
-        
-        // Define Blazor error handler before loading the script
-        function handleBlazorLoadError() {
-            console.error('Failed to load blazor.webassembly.js - likely a GitHub Pages base href issue');
-            const app = document.getElementById('app');
-            if (app) {
-                app.innerHTML = `
-                    <div style="padding: 40px; text-align: center; font-family: Arial, sans-serif;">
-                        <h2 style="color: #d32f2f;">⚠️ Blazor WebAssembly Loading Failed</h2>
-                        <p>This usually happens on GitHub Pages due to base href path issues.</p>
-                        <div style="background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 8px;">
-                            <h4>Try these alternatives:</h4>
-                            <a href="embedded-game.html" style="display: inline-block; margin: 10px; padding: 10px 20px; background: #1976d2; color: white; text-decoration: none; border-radius: 4px;">
-                                🎮 Embedded Game
-                            </a>
-                            <a href="standalone-blackjack.html" style="display: inline-block; margin: 10px; padding: 10px 20px; background: #388e3c; color: white; text-decoration: none; border-radius: 4px;">
-                                🃏 Standalone Version
-                            </a>
-                        </div>
-                        <p style="font-size: 0.9em; color: #666;">
-                            Current URL: ${window.location.href}<br>
-                            Base href: ${document.querySelector('base')?.href || 'Not set'}
-                        </p>
-                    </div>
-                `;
-            }
-        }
-        
-        // Define tryAlternativeFrameworkPath before the script tag
-        function tryAlternativeFrameworkPath() {
-            console.warn('🔄 _framework path failed, trying alternative framework path...');
-            const script = document.createElement('script');
-            script.src = 'framework/blazor.webassembly.js';
-            script.onerror = function() {
-                console.error('❌ Both _framework and framework paths failed');
-                handleBlazorLoadError();
-            };
-            script.onload = function() {
-                console.log('✅ Alternative framework path worked!');
-            };
-            document.head.appendChild(script);
-        }
-        
-        // Load Blazor script dynamically after base href is set
-        function loadBlazorScript() {
-            console.log('🚀 Loading Blazor script dynamically...');
-            const script = document.createElement('script');
-            script.src = '_framework/blazor.webassembly.js';
-            script.onerror = function() {
-                console.warn('🔄 _framework path failed, trying alternative framework path...');
-                tryAlternativeFrameworkPath();
-            };
-            script.onload = function() {
-                console.log('✅ Blazor script loaded successfully!');
-            };
-            document.head.appendChild(script);
-        }
-        
-        // Load the script after a short delay to ensure base href is set
-        setTimeout(loadBlazorScript, 100);
-    </script>
+    <script src="_framework/blazor.webassembly.js"></script>
 </body>
 
 </html>

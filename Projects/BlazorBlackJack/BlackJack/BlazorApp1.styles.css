@@ -155,9 +155,10 @@
     }
 
     .chips-display[b-hq04ultgve]:before {
-        content: '💰';
+        content: '$';
         margin-right: 8px;
         font-size: 16px;
+        font-weight: bold;
     }
 
     .chips-display:hover[b-hq04ultgve] {
@@ -183,9 +184,11 @@
     }
 
     .chips-error[b-hq04ultgve]:before {
-        content: '⚠️';
+        content: '!';
         margin-right: 6px;
         font-size: 12px;
+        font-weight: bold;
+        color: #ff6b6b;
     }
 
     .chips-loading[b-hq04ultgve] {
@@ -199,9 +202,10 @@
     }
 
     .chips-loading[b-hq04ultgve]:before {
-        content: '⏳';
+        content: '~';
         margin-right: 6px;
         font-size: 12px;
+        animation: spin 1s linear infinite;
     }
 
     .bet-box[b-hq04ultgve] {
@@ -227,9 +231,10 @@
     }
 
     .bet-amount-display[b-hq04ultgve]:before {
-        content: '🎯';
+        content: '→';
         margin-right: 6px;
         font-size: 14px;
+        font-weight: bold;
     }
 
     .bet-controls[b-hq04ultgve] {
@@ -282,6 +287,18 @@
         opacity: 0.6;
         cursor: not-allowed;
         background-color: #888;
+    }
+
+    .bet-input:disabled[b-hq04ultgve] {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-color: #f5f5f5;
+        color: #888;
+    }
+
+    .bet-slider:disabled[b-hq04ultgve] {
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 
     /* High contrast mode improvements */
@@ -339,6 +356,11 @@
         border-color: #357abd;
         box-shadow: 0 0 0 3px rgba(74,144,226,0.3);
         background: white;
+    }
+
+    .bet-input:invalid[b-hq04ultgve] {
+        border-color: #e74c3c;
+        box-shadow: 0 0 0 3px rgba(231,76,60,0.3);
     }
 
     .bet-slider-container[b-hq04ultgve] {

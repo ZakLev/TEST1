@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Embeddable BlackJack Game</title>
-    <base href="/TEST1/Projects/BlazorBlackJack/BlackJack/" />
-    <!-- CSS will be loaded dynamically based on environment -->
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="BlazorApp1.styles.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -16,7 +16,6 @@
     </div>
 
     <style>
-        /* Essential styles for embedded game */
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -29,15 +28,6 @@
             background-color: #f5f5f5;
         }
         
-        #blackjack-game {
-            min-height: 400px;
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Blazor error UI styles */
         #blazor-error-ui {
             background: lightyellow;
             bottom: 0;
@@ -48,7 +38,6 @@
             position: fixed;
             width: 100%;
             z-index: 1000;
-            box-sizing: border-box;
         }
 
         #blazor-error-ui .dismiss {
@@ -56,86 +45,6 @@
             position: absolute;
             right: 0.75rem;
             top: 0.5rem;
-        }
-        
-        /* Basic button styles */
-        .btn {
-            display: inline-block;
-            padding: 0.375rem 0.75rem;
-            margin-bottom: 0;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: middle;
-            cursor: pointer;
-            border: 1px solid transparent;
-            border-radius: 0.25rem;
-            text-decoration: none;
-            transition: all 0.2s ease-in-out;
-        }
-        
-        .btn-primary {
-            color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-        
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-        }
-        
-        .btn-secondary {
-            color: #fff;
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-        
-        .btn-success {
-            color: #fff;
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-        
-        .btn-danger {
-            color: #fff;
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-        
-        /* Card game specific styles */
-        .card {
-            background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 0.25rem;
-            margin: 0.25rem;
-            display: inline-block;
-            text-align: center;
-            font-weight: bold;
-            min-width: 60px;
-            min-height: 80px;
-            padding: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-        }
-        
-        .game-area {
-            text-align: center;
-            padding: 1rem;
-        }
-        
-        .player-area, .dealer-area {
-            margin: 1rem 0;
-            padding: 1rem;
-            border-radius: 8px;
-            background: #f8f9fa;
-        }
-        
-        .score {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
         }
     </style>
 
@@ -147,11 +56,36 @@
 
     <!-- Error logging and Blazor initialization -->
     <script>
-        // Blazor debugging
-        window.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, Blazor container found:', document.getElementById('blackjack-game') !== null);
-        });
+        // Global flag to ensure DOM is ready before Blazor starts
+        window.isDOMReady = false;
+        
+        // Ensure the container exists before Blazor loads
+        function initializePage() {
+            console.log('Initializing page...');
+            const container = document.getElementById('blackjack-game');
+            console.log('Blazor container found:', container !== null);
+            
+            if (!container) {
+                console.error('ERROR: #blackjack-game container not found!');
+                // Create the container if it doesn't exist
+                const newContainer = document.createElement('div');
+                newContainer.id = 'blackjack-game';
+                document.body.appendChild(newContainer);
+                console.log('Created missing #blackjack-game container');
+            }
+            
+            window.isDOMReady = true;
+            console.log('DOM is ready for Blazor initialization');
+        }
 
+        // Wait for DOM to be completely ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+
+        // Blazor culture configuration
         window.blazorCulture = {
             get: () => "en-US",
             set: () => {}
@@ -170,156 +104,20 @@
             console.error('Promise:', e.promise);
         });
 
-        // Blazor startup monitoring
-        window.Blazor = window.Blazor || {};
-        
-        // Override Blazor start to add logging
-        const originalStart = window.Blazor.start;
-        window.Blazor.start = function(options) {
-            console.log('Blazor.start called with options:', options);
-            
-            if (originalStart) {
-                return originalStart.call(this, options);
+        // Monitor Blazor initialization
+        setTimeout(function() {
+            const container = document.getElementById('blackjack-game');
+            if (container && container.innerHTML.trim() === '') {
+                console.error('Blazor failed to initialize - container is still empty after 5 seconds');
+                container.innerHTML = '<div style="padding: 20px; background: #ffebee; border: 1px solid #f44336; border-radius: 4px; margin: 20px;"><h3>Blazor Initialization Failed</h3><p>Check the browser console for error details.</p><p>This usually indicates a JavaScript loading error or component issue.</p></div>';
+            } else if (container) {
+                console.log('Blazor appears to have initialized successfully');
             }
-        };
-
-        // Monitor Blazor events
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Waiting for Blazor to initialize...');
-            
-            // Check if Blazor loaded after some time
-            setTimeout(function() {
-                const container = document.getElementById('blackjack-game');
-                if (container && container.innerHTML.trim() === '') {
-                    console.error('Blazor failed to initialize - container is still empty');
-                    container.innerHTML = '<div style="padding: 20px; background: #ffebee; border: 1px solid #f44336; border-radius: 4px;"><h3>Blazor Initialization Failed</h3><p>Check the browser console for error details.</p></div>';
-                } else {
-                    console.log('Blazor appears to have initialized successfully');
-                }
-            }, 5000);
-        });
+        }, 5000);
+    </script>
     </script>
     
-    <script>
-        // Dynamic base href detection and CSS loading for different hosting environments
-        (function() {
-            const hostname = window.location.hostname;
-            const pathname = window.location.pathname;
-            const fullURL = window.location.href;
-            
-            console.log('🔍 Debug Info:', { hostname, pathname, fullURL });
-            
-            const isGitHubPages = hostname.includes('github.io');
-            const isLocalDevelopment = hostname === 'localhost' || hostname === '127.0.0.1';
-            const isCustomDomain = !isGitHubPages && !isLocalDevelopment;
-            
-            console.log('🌐 Environment Detection:', { isGitHubPages, isLocalDevelopment, isCustomDomain });
-            
-            let cssBasePath = '';
-            
-            if (isLocalDevelopment) {
-                // For local development, use relative path
-                const baseElement = document.querySelector('base');
-                if (baseElement) {
-                    baseElement.href = './';
-                }
-                cssBasePath = './';
-                console.log('🏠 Local development detected, using relative base href and CSS paths');
-            } else if (isGitHubPages) {
-                // For GitHub Pages, ensure correct base href
-                const baseElement = document.querySelector('base');
-                if (baseElement) {
-                    baseElement.href = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
-                }
-                cssBasePath = '/TEST1/Projects/BlazorBlackJack/BlackJack/';
-                console.log('📦 GitHub Pages detected, using absolute base href and CSS paths');
-            } else if (isCustomDomain) {
-                // For custom domains (like mrpotatoez.com)
-                // Since URL is mrpotatoez.com/Projects/..., we don't need /TEST1/
-                const baseElement = document.querySelector('base');
-                if (baseElement) {
-                    baseElement.href = '/Projects/BlazorBlackJack/BlackJack/';
-                }
-                cssBasePath = '/Projects/BlazorBlackJack/BlackJack/';
-                console.log('🌍 Custom domain detected (mrpotatoez.com), using root-based absolute path without TEST1');
-                console.log('📍 Base href set to:', baseElement?.href);
-                console.log('🎨 CSS base path:', cssBasePath);
-            } else {
-                // Fallback to relative paths
-                cssBasePath = './';
-                console.log('Unknown environment, using relative paths as fallback');
-            }
-            
-            // Load CSS files dynamically
-            const cssFiles = ['css/app.css', 'BlazorApp1.styles.css'];
-            cssFiles.forEach(cssFile => {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = cssBasePath + cssFile;
-                link.onerror = function() {
-                    console.warn(`Failed to load CSS: ${cssFile}`);
-                };
-                document.head.appendChild(link);
-            });
-        })();
-        
-        // Define Blazor error handler before loading the script
-        function handleBlazorLoadError() {
-            console.error('Failed to load blazor.webassembly.js');
-            const container = document.getElementById('blackjack-game');
-            if (container) {
-                container.innerHTML = `
-                    <div style="padding: 20px; background: #ffebee; border: 1px solid #f44336; border-radius: 4px; text-align: center;">
-                        <h3>🚫 Blazor Loading Error</h3>
-                        <p>The Blazor WebAssembly framework failed to load.</p>
-                        <p><strong>This may be due to:</strong></p>
-                        <ul style="text-align: left; display: inline-block;">
-                            <li>Missing or incorrect base href configuration</li>
-                            <li>CORS restrictions on GitHub Pages</li>
-                            <li>Network connectivity issues</li>
-                        </ul>
-                        <br>
-                        <a href="../standalone-blackjack.html" style="display: inline-block; padding: 10px 20px; background: #2196F3; color: white; text-decoration: none; border-radius: 4px;">
-                            Try Standalone Version
-                        </a>
-                    </div>
-                `;
-            }
-        }
-        
-        // Define tryAlternativeFrameworkPath before the script tag
-        function tryAlternativeFrameworkPath() {
-            console.warn('🔄 _framework path failed, trying alternative framework path...');
-            const script = document.createElement('script');
-            script.src = 'framework/blazor.webassembly.js';
-            script.onerror = function() {
-                console.error('❌ Both _framework and framework paths failed');
-                handleBlazorLoadError();
-            };
-            script.onload = function() {
-                console.log('✅ Alternative framework path worked!');
-            };
-            document.head.appendChild(script);
-        }
-        
-        // Load Blazor script dynamically after base href is set
-        function loadBlazorScript() {
-            console.log('🚀 Loading Blazor script dynamically...');
-            const script = document.createElement('script');
-            script.src = '_framework/blazor.webassembly.js';
-            script.onerror = function() {
-                console.warn('🔄 _framework path failed, trying alternative framework path...');
-                tryAlternativeFrameworkPath();
-            };
-            script.onload = function() {
-                console.log('✅ Blazor script loaded successfully!');
-            };
-            document.head.appendChild(script);
-        }
-        
-        // Load the script after a short delay to ensure base href is set
-        setTimeout(loadBlazorScript, 100);
-    </script>
+    <script src="_framework/blazor.webassembly.js"></script>
 </body>
 
 </html>
