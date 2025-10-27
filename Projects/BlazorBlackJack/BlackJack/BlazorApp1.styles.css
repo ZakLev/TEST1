@@ -63,72 +63,97 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     max-width: 100%;
     margin: 0;
-    padding: 10px;
-    min-height: 100vh;
+    padding: 5px;
+    max-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.blackjack-embedded h1[b-hq04ultgve] {
+    font-size: 1.5rem;
+    margin: 5px 0;
+}
+
+.blackjack-embedded h2[b-hq04ultgve] {
+    font-size: 1.2rem;
+    margin: 5px 0;
+}
+
+.blackjack-embedded h3[b-hq04ultgve] {
+    font-size: 1rem;
+    margin: 5px 0;
 }
 
 .game-instructions[b-hq04ultgve] {
     background-color: #f8f9fa;
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 8px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     border-left: 4px solid #4a90e2;
+    font-size: 14px;
 }
 
 .blackjack-embedded .game-container[b-hq04ultgve] {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 5px;
     display: flex;
-    gap: 30px;
+    gap: 15px;
     align-items: flex-start;
     width: 100%;
     box-sizing: border-box;
+    max-height: calc(100vh - 10px);
+    overflow: hidden;
 }
 
 .blackjack-embedded .main-game-area[b-hq04ultgve] {
     flex: 1;
     min-width: 600px;
     width: 100%;
+    overflow-y: auto;
+    max-height: calc(100vh - 20px);
 }
 
 .blackjack-embedded .deck-section[b-hq04ultgve] {
-    flex: 0 0 200px;
-    padding: 20px;
+    flex: 0 0 180px;
+    padding: 10px;
     background-color: #2d5016;
     border-radius: 12px;
     text-align: center;
     color: white;
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     /* Align deck section with dealer's hand on wide screens */
-    margin-top: 60px; /* Approximate height of game instructions + spacing to align with dealer section */
+    margin-top: 40px; /* Reduced from 60px */
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
 }
 
 /* For wider screens, ensure proper alignment */
 @media (min-width: 900px) {
     .blackjack-embedded .deck-section[b-hq04ultgve] {
-        margin-top: 80px; /* Fine-tuned alignment with dealer section top */
+        margin-top: 50px; /* Reduced from 80px */
     }
 }
 
 /* For very wide screens, optimize alignment further */
 @media (min-width: 1200px) {
     .blackjack-embedded .deck-section[b-hq04ultgve] {
-        margin-top: 85px; /* Precise alignment for large screens */
+        margin-top: 55px; /* Reduced from 85px */
     }
 }
 
 .blackjack-embedded .deck-section h3[b-hq04ultgve],
 .blackjack-embedded .deck-section h4[b-hq04ultgve] {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: #fff;
+    font-size: 16px;
 }
 
 .blackjack-embedded .deck-container[b-hq04ultgve] {
     position: relative;
-    height: 120px;
-    margin: 20px auto;
-    width: 80px;
+    height: 80px;
+    margin: 10px auto;
+    width: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -136,7 +161,7 @@
 
 .blackjack-embedded .deck-card[b-hq04ultgve] {
     position: absolute;
-    width: 60px !important;
+    width: 45px !important;
     height: auto !important;
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.4);
@@ -152,14 +177,14 @@
     }
 
     .chips-display[b-hq04ultgve] {
-        font-size: 18px;
+        font-size: 16px;
         color: #ffd700;
         font-weight: bold;
         margin-top: 5px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
         background: rgba(0,0,0,0.3);
-        padding: 8px 12px;
+        padding: 6px 10px;
         border-radius: 8px;
         border: 2px solid #ffd700;
         text-align: center;
@@ -225,8 +250,8 @@
     }
 
     .bet-box[b-hq04ultgve] {
-        margin-top: 15px;
-        padding: 15px;
+        margin-top: 10px;
+        padding: 10px;
         background: rgba(0,0,0,0.4);
         border-radius: 10px;
         border: 2px solid #4a90e2;
@@ -234,13 +259,13 @@
     }
 
     .bet-amount-display[b-hq04ultgve] {
-        font-size: 16px;
+        font-size: 14px;
         color: #4a90e2;
         font-weight: bold;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
         text-align: center;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-        padding: 6px 10px;
+        padding: 5px 8px;
         background: rgba(74,144,226,0.2);
         border-radius: 6px;
         border: 1px solid #4a90e2;
@@ -257,8 +282,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        margin-bottom: 12px;
+        gap: 6px;
+        margin-bottom: 8px;
         flex-wrap: wrap;
     }
 
@@ -267,14 +292,14 @@
         color: white;
         border: 2px solid transparent;
         border-radius: 6px;
-        padding: 12px 16px;
-        font-size: 16px;
+        padding: 8px 12px;
+        font-size: 14px;
         font-weight: bold;
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        min-width: 48px; /* Touch target minimum */
-        min-height: 48px; /* Touch target minimum */
+        min-width: 40px; /* Touch target minimum */
+        min-height: 40px; /* Touch target minimum */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -284,8 +309,8 @@
     }
 
     .game-button[b-hq04ultgve] {
-        min-width: 120px;
-        margin: 0.5rem;
+        min-width: 100px;
+        margin: 0.3rem;
     }
 
     /* Focus indicators */
@@ -356,13 +381,13 @@
         background: rgba(255,255,255,0.9);
         border: 2px solid #4a90e2;
         border-radius: 6px;
-        padding: 8px 12px;
-        font-size: 16px;
+        padding: 6px 10px;
+        font-size: 14px;
         font-weight: bold;
         text-align: center;
         color: #333;
-        width: 80px;
-        height: 40px;
+        width: 70px;
+        height: 36px;
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         transition: all 0.3s ease;
     }
@@ -457,36 +482,36 @@
 
 .blackjack-embedded .dealer-section[b-hq04ultgve], 
 .blackjack-embedded .player-section[b-hq04ultgve] {
-    margin: 20px 0;
-    padding: 15px;
+    margin: 10px 0;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f8f9fa;
-    min-height: 150px;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .blackjack-embedded .cards[b-hq04ultgve] {
-    margin: 10px 0;
+    margin: 5px 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 3px;
     align-items: center;
     justify-content: center;
 }
 
 .blackjack-embedded .card-image[b-hq04ultgve] {
-    width: 100px !important;
+    width: 70px !important;
     height: auto !important;
-    margin: 5px !important;
+    margin: 3px !important;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: transform 0.6s ease;
     display: inline-block !important;
     max-width: none !important;
-    min-width: 100px !important;
+    min-width: 70px !important;
     object-fit: contain;
 }
 
@@ -549,17 +574,17 @@
 }
 
 .game-controls[b-hq04ultgve] {
-    margin: 20px 0;
+    margin: 10px 0;
     text-align: center;
 }
 
 .game-controls button[b-hq04ultgve] {
-    margin: 0 10px;
-    padding: 10px 20px;
+    margin: 0 5px;
+    padding: 8px 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .btn-success[b-hq04ultgve] {
@@ -591,10 +616,11 @@
 
 .game-result[b-hq04ultgve] {
     text-align: center;
-    margin: 20px 0;
-    padding: 15px;
+    margin: 10px 0;
+    padding: 10px;
     border-radius: 8px;
     background-color: #e9ecef;
+    font-size: 14px;
 }
 
 /* Donation Popup Styles */
@@ -724,19 +750,26 @@
         width: 100%;
         order: -1;
         margin-top: 0; /* Reset margin-top for mobile/narrow screens */
+        max-height: none;
     }
     
     .blackjack-embedded .main-game-area[b-hq04ultgve] {
         min-width: auto;
+        max-height: none;
     }
     
     .blackjack-embedded .deck-container[b-hq04ultgve] {
-        height: 80px;
-        width: 60px;
+        height: 60px;
+        width: 50px;
     }
     
     .blackjack-embedded .deck-card[b-hq04ultgve] {
-        width: 50px !important;
+        width: 40px !important;
+    }
+    
+    .blackjack-embedded .card-image[b-hq04ultgve] {
+        width: 60px !important;
+        min-width: 60px !important;
     }
 }
 /* /Layout/MainLayout.razor.rz.scp.css */
