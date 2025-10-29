@@ -1,0 +1,777 @@
+/* _content/BlazorTicTacToe/Components/Layout/MainLayout.razor.rz.scp.css */
+.page[b-rgmqo3kvng] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main[b-rgmqo3kvng] {
+    flex: 1;
+}
+
+.sidebar[b-rgmqo3kvng] {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+}
+
+.top-row[b-rgmqo3kvng] {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .top-row[b-rgmqo3kvng]  a, .top-row[b-rgmqo3kvng]  .btn-link {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+        text-decoration: none;
+    }
+
+    .top-row[b-rgmqo3kvng]  a:hover, .top-row[b-rgmqo3kvng]  .btn-link:hover {
+        text-decoration: underline;
+    }
+
+    .top-row[b-rgmqo3kvng]  a:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+@media (max-width: 640.98px) {
+    .top-row[b-rgmqo3kvng] {
+        justify-content: space-between;
+    }
+
+    .top-row[b-rgmqo3kvng]  a, .top-row[b-rgmqo3kvng]  .btn-link {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 641px) {
+    .page[b-rgmqo3kvng] {
+        flex-direction: row;
+    }
+
+    .sidebar[b-rgmqo3kvng] {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row[b-rgmqo3kvng] {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .top-row.auth[b-rgmqo3kvng]  a:first-child {
+        flex: 1;
+        text-align: right;
+        width: 0;
+    }
+
+    .top-row[b-rgmqo3kvng], article[b-rgmqo3kvng] {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+
+#blazor-error-ui[b-rgmqo3kvng] {
+    color-scheme: light only;
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss[b-rgmqo3kvng] {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+/* _content/BlazorTicTacToe/Components/Layout/NavMenu.razor.rz.scp.css */
+.navbar-toggler[b-cm5t22p5zl] {
+    appearance: none;
+    cursor: pointer;
+    width: 3.5rem;
+    height: 2.5rem;
+    color: white;
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") no-repeat center/1.75rem rgba(255, 255, 255, 0.1);
+}
+
+.navbar-toggler:checked[b-cm5t22p5zl] {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.top-row[b-cm5t22p5zl] {
+    min-height: 3.5rem;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.navbar-brand[b-cm5t22p5zl] {
+    font-size: 1.1rem;
+}
+
+.bi[b-cm5t22p5zl] {
+    display: inline-block;
+    position: relative;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.75rem;
+    top: -1px;
+    background-size: cover;
+}
+
+.bi-house-door-fill-nav-menu[b-cm5t22p5zl] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-house-door-fill' viewBox='0 0 16 16'%3E%3Cpath d='M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z'/%3E%3C/svg%3E");
+}
+
+.bi-plus-square-fill-nav-menu[b-cm5t22p5zl] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-plus-square-fill' viewBox='0 0 16 16'%3E%3Cpath d='M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z'/%3E%3C/svg%3E");
+}
+
+.bi-list-nested-nav-menu[b-cm5t22p5zl] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-list-nested' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4.5 11.5A.5.5 0 0 1 5 11h10a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 1 3h10a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z'/%3E%3C/svg%3E");
+}
+
+.nav-item[b-cm5t22p5zl] {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+}
+
+    .nav-item:first-of-type[b-cm5t22p5zl] {
+        padding-top: 1rem;
+    }
+
+    .nav-item:last-of-type[b-cm5t22p5zl] {
+        padding-bottom: 1rem;
+    }
+
+    .nav-item[b-cm5t22p5zl]  .nav-link {
+        color: #d7d7d7;
+        background: none;
+        border: none;
+        border-radius: 4px;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        line-height: 3rem;
+        width: 100%;
+    }
+
+.nav-item[b-cm5t22p5zl]  a.active {
+    background-color: rgba(255,255,255,0.37);
+    color: white;
+}
+
+.nav-item[b-cm5t22p5zl]  .nav-link:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.nav-scrollable[b-cm5t22p5zl] {
+    display: none;
+}
+
+.navbar-toggler:checked ~ .nav-scrollable[b-cm5t22p5zl] {
+    display: block;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler[b-cm5t22p5zl] {
+        display: none;
+    }
+
+    .nav-scrollable[b-cm5t22p5zl] {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+
+        /* Allow sidebar to scroll for tall menus */
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+}
+/* _content/BlazorTicTacToe/Components/Pages/TicTacToe.razor.rz.scp.css */
+/* Copyright (c) Zak Levine 2025 */
+/* Licensed under the MIT License. See LICENSE in the project root for license information. */
+/* TicTacToe.razor.css - Styles for the Tic Tac Toe game component */
+
+.game-container[b-00qzkxzmz0] {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.room-header[b-00qzkxzmz0] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.room-header h2[b-00qzkxzmz0] {
+    color: #333;
+    margin: 0;
+}
+
+.timer-display[b-00qzkxzmz0] {
+    font-size: 48px;
+    font-weight: bold;
+    padding: 15px 30px;
+    border-radius: 10px;
+    min-width: 100px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.timer-normal[b-00qzkxzmz0] {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.timer-critical[b-00qzkxzmz0] {
+    background-color: #f44336;
+    color: white;
+}
+
+.timer-critical.flash[b-00qzkxzmz0] {
+    background-color: #ff6b6b;
+    transform: scale(1.1);
+}
+
+.btn-back[b-00qzkxzmz0] {
+    padding: 10px 20px;
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-back:hover[b-00qzkxzmz0] {
+    background-color: #555;
+}
+
+.room-info-display[b-00qzkxzmz0] {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.players-display h3[b-00qzkxzmz0] {
+    margin-top: 0;
+    color: #333;
+}
+
+.player-info-item[b-00qzkxzmz0] {
+    padding: 8px 12px;
+    margin: 5px 0;
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid #ddd;
+    transition: all 0.3s;
+}
+
+.player-info-item.active-player[b-00qzkxzmz0] {
+    border-color: #4CAF50;
+    background-color: #e8f5e9;
+    font-weight: bold;
+}
+
+.player-info-item.disconnected-player[b-00qzkxzmz0] {
+    opacity: 0.6;
+    border-color: #ff9800;
+    background-color: #fff3e0;
+}
+
+.player-info-item.joining-player[b-00qzkxzmz0] {
+    border-color: #2196F3;
+    background-color: #e3f2fd;
+    animation: joinPulse-b-00qzkxzmz0 1s ease-in-out infinite;
+}
+
+.joining-status[b-00qzkxzmz0] {
+    margin-left: 10px;
+    font-size: 14px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background-color: #2196F3;
+    color: white;
+    font-weight: bold;
+}
+
+.disconnected-status[b-00qzkxzmz0] {
+    margin-left: 10px;
+    font-size: 14px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background-color: #ff9800;
+    color: white;
+    font-weight: bold;
+}
+
+.spectators-display[b-00qzkxzmz0] {
+    display: flex;
+    align-items: center;
+}
+
+.spectators-display p[b-00qzkxzmz0] {
+    margin: 0;
+    color: #666;
+}
+
+.tic-tac-toe-game[b-00qzkxzmz0] {
+    text-align: center;
+}
+
+.game-info[b-00qzkxzmz0] {
+    margin-bottom: 20px;
+}
+
+.game-info h4[b-00qzkxzmz0] {
+    color: #333;
+    font-size: 24px;
+}
+
+.board[b-00qzkxzmz0] {
+    display: inline-block;
+    background-color: #34495e;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.board-row[b-00qzkxzmz0] {
+    display: flex;
+}
+
+.board-cell[b-00qzkxzmz0] {
+    width: 100px;
+    height: 100px;
+    font-size: 48px;
+    font-weight: bold;
+    margin: 5px;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.board-cell:hover:not(:disabled)[b-00qzkxzmz0] {
+    background-color: #ecf0f1;
+    transform: scale(1.05);
+}
+
+.board-cell:disabled[b-00qzkxzmz0] {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.board-cell.cell-x[b-00qzkxzmz0] {
+    color: #e74c3c;
+}
+
+.board-cell.cell-o[b-00qzkxzmz0] {
+    color: #3498db;
+}
+
+.board-cell.cell-empty[b-00qzkxzmz0] {
+    color: transparent;
+}
+
+.game-controls[b-00qzkxzmz0] {
+    margin-top: 20px;
+}
+
+.btn-restart[b-00qzkxzmz0] {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #FF9800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-restart:hover[b-00qzkxzmz0] {
+    background-color: #e68900;
+}
+
+.spectator-notice[b-00qzkxzmz0] {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 5px;
+}
+
+.spectator-notice p[b-00qzkxzmz0] {
+    margin: 0;
+    color: #856404;
+    font-weight: bold;
+}
+
+.waiting-section[b-00qzkxzmz0] {
+    text-align: center;
+    padding: 30px;
+    background-color: #f0f8ff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.waiting-section h3[b-00qzkxzmz0] {
+    color: #333;
+    margin-top: 0;
+}
+
+.room-code-reminder[b-00qzkxzmz0] {
+    font-size: 18px;
+    color: #666;
+    margin: 15px 0;
+}
+
+.btn-ready[b-00qzkxzmz0] {
+    padding: 15px 40px;
+    font-size: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 10px;
+}
+
+.btn-ready:hover[b-00qzkxzmz0] {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.btn-unready[b-00qzkxzmz0] {
+    background-color: #ff9800;
+}
+
+.btn-unready:hover[b-00qzkxzmz0] {
+    background-color: #e68900;
+}
+
+.waiting-ready[b-00qzkxzmz0] {
+    font-size: 18px;
+    color: #666;
+    font-style: italic;
+    animation: pulse-b-00qzkxzmz0 1.5s ease-in-out infinite;
+}
+
+.ready-status[b-00qzkxzmz0] {
+    margin-left: 10px;
+    font-size: 14px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+}
+
+@keyframes pulse-b-00qzkxzmz0 {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes joinPulse-b-00qzkxzmz0 {
+    0%, 100% { 
+        border-color: #2196F3;
+        background-color: #e3f2fd;
+    }
+    50% { 
+        border-color: #64B5F6;
+        background-color: #bbdefb;
+    }
+}
+/* _content/BlazorTicTacToe/Components/Pages/TicTacToeMainMenu.razor.rz.scp.css */
+/* Copyright (c) Zak Levine 2025 */
+/* Licensed under the MIT License. See LICENSE in the project root for license information. */
+/* TicTacToeMainMenu.razor.css - Styles for the Tic Tac Toe main menu component */
+
+.main-menu-container[b-y7cwk085dd] {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+h1[b-y7cwk085dd] {
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.player-name-section[b-y7cwk085dd] {
+    margin-bottom: 30px;
+}
+
+.player-name-section label[b-y7cwk085dd] {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+.player-name-section input[b-y7cwk085dd] {
+    padding: 10px;
+    font-size: 16px;
+    width: 300px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+}
+
+.rejoin-section[b-y7cwk085dd] {
+    background-color: #fff3e0;
+    border: 3px solid #ff9800;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rejoin-section h3[b-y7cwk085dd] {
+    color: #e65100;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.rejoin-section p[b-y7cwk085dd] {
+    color: #333;
+    margin: 10px 0;
+}
+
+.rejoin-buttons[b-y7cwk085dd] {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.btn-rejoin[b-y7cwk085dd] {
+    padding: 12px 30px;
+    font-size: 16px;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-rejoin:hover[b-y7cwk085dd] {
+    background-color: #e68900;
+}
+
+.btn-cancel-rejoin[b-y7cwk085dd] {
+    padding: 12px 30px;
+    font-size: 16px;
+    background-color: #999;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-cancel-rejoin:hover[b-y7cwk085dd] {
+    background-color: #777;
+}
+
+.success-message[b-y7cwk085dd] {
+    color: #4CAF50;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.menu-buttons[b-y7cwk085dd] {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.btn-host[b-y7cwk085dd], .btn-join[b-y7cwk085dd], .btn-start[b-y7cwk085dd], .btn-leave[b-y7cwk085dd], .btn-cancel[b-y7cwk085dd] {
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-host[b-y7cwk085dd] {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-host:hover[b-y7cwk085dd] {
+    background-color: #45a049;
+}
+
+.btn-join[b-y7cwk085dd] {
+    background-color: #2196F3;
+    color: white;
+}
+
+.btn-join:hover[b-y7cwk085dd] {
+    background-color: #0b7dda;
+}
+
+.btn-start[b-y7cwk085dd] {
+    background-color: #FF9800;
+    color: white;
+    margin: 20px 10px;
+}
+
+.btn-start:hover[b-y7cwk085dd] {
+    background-color: #e68900;
+}
+
+.btn-leave[b-y7cwk085dd] {
+    background-color: #f44336;
+    color: white;
+    margin: 10px;
+}
+
+.btn-leave:hover[b-y7cwk085dd] {
+    background-color: #da190b;
+}
+
+.btn-cancel[b-y7cwk085dd] {
+    background-color: #999;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn-cancel:hover[b-y7cwk085dd] {
+    background-color: #777;
+}
+
+.popup-overlay[b-y7cwk085dd] {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content[b-y7cwk085dd] {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 400px;
+}
+
+.popup-content h3[b-y7cwk085dd] {
+    margin-top: 0;
+    color: #333;
+}
+
+.host-options[b-y7cwk085dd] {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.toggle-option[b-y7cwk085dd] {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+}
+
+.toggle-option label[b-y7cwk085dd] {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.toggle-option input[type="checkbox"][b-y7cwk085dd] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.toggle-label[b-y7cwk085dd] {
+    font-weight: bold;
+}
+
+.option-description[b-y7cwk085dd] {
+    font-size: 14px;
+    color: #666;
+    margin: 8px 0 0 30px;
+    font-style: italic;
+}
+
+.popup-buttons[b-y7cwk085dd] {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.popup-buttons button[b-y7cwk085dd] {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.popup-buttons button:hover[b-y7cwk085dd] {
+    background-color: #45a049;
+}
+
+.join-code-section[b-y7cwk085dd] {
+    display: flex;
+    gap: 10px;
+}
+
+.join-code-section input[b-y7cwk085dd] {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+}
+
+.join-code-section button[b-y7cwk085dd] {
+    padding: 10px 20px;
+}
+
+.error-message[b-y7cwk085dd] {
+    color: #f44336;
+    margin-top: 15px;
+    font-weight: bold;
+}

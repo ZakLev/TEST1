@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToe Embedded Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .demo-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .demo-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .embed-container {
+            width: 100%;
+            height: 800px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .embed-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-left: 4px solid #2196F3;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #1976D2;
+        }
+        .instructions code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .instructions pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .option-controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff3e0;
+            border-radius: 8px;
+        }
+        .option-controls label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .option-controls input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .feature-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1>🎮 Blazor TicTacToe - Embedded Component Demo</h1>
+        <p>This demonstrates how to embed the TicTacToe game in any HTML page using an iframe</p>
+    </div>
+
+    <div class="demo-section">
+        <div class="instructions">
+            <h3>📝 How to Embed in Your Website</h3>
+            <p><strong>Method 1: Simple iframe (Recommended)</strong></p>
+            <pre><code>&lt;iframe 
+    src="http://localhost:5149/embed?openInNewTab=false" 
+    width="100%" 
+    height="800" 
+    frameborder="0"
+    style="border: 2px solid #667eea; border-radius: 8px;"
+&gt;&lt;/iframe&gt;</code></pre>
+            
+            <p><strong>Method 2: For external .com websites</strong></p>
+            <pre><code>&lt;iframe 
+    src="https://your-deployed-app.com/embed?openInNewTab=false" 
+    width="100%" 
+    height="800" 
+    frameborder="0"
+    allow="fullscreen"
+&gt;&lt;/iframe&gt;</code></pre>
+            
+            <p><strong>URL Parameters:</strong></p>
+            <ul>
+                <li><code>openInNewTab=false</code>: Embed games within the iframe (default)</li>
+                <li><code>openInNewTab=true</code>: Open games in new browser tab</li>
+            </ul>
+        </div>
+
+        <div class="option-controls">
+            <label>
+                <input type="checkbox" id="newTabCheckbox" onchange="updateEmbedOption()">
+                Open games in new tab instead of embedding
+            </label>
+        </div>
+
+        <h2>Live Demo:</h2>
+        <div class="embed-container">
+            <iframe id="gameFrame" src="http://localhost:5149/embed?openInNewTab=false"></iframe>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>📖 Features</h2>
+        <p>This embedded component provides full TicTacToe functionality:</p>
+        <div class="feature-list">
+            <div class="feature-item">
+                <strong>🎮 Host Games</strong><br>
+                Create open or private rooms with custom settings
+            </div>
+            <div class="feature-item">
+                <strong>🔗 Join Games</strong><br>
+                Join by 6-digit code or random matchmaking
+            </div>
+            <div class="feature-item">
+                <strong>⚡ Real-time</strong><br>
+                Multiplayer with SignalR technology
+            </div>
+            <div class="feature-item">
+                <strong>🔄 Auto-reconnect</strong><br>
+                Disconnect handling with 5-second grace period
+            </div>
+            <div class="feature-item">
+                <strong>⏱️ Turn Timer</strong><br>
+                40-second countdown with visual feedback
+            </div>
+            <div class="feature-item">
+                <strong>🏆 Score Tracking</strong><br>
+                Track wins across multiple games
+            </div>
+        </div>
+        
+        <h3>Deployment Options</h3>
+        <p><strong>Option 1: Embedded Mode (openInNewTab=false)</strong></p>
+        <p>The game embeds directly in the iframe. Good for:</p>
+        <ul>
+            <li>Integrated user experience</li>
+            <li>Keeping users on your site</li>
+            <li>When you want to control the layout</li>
+            <li>Single-page applications</li>
+        </ul>
+
+        <p><strong>Option 2: New Tab Mode (openInNewTab=true)</strong></p>
+        <p>Games open in a new browser tab. Good for:</p>
+        <ul>
+            <li>Keeping your main page clean</li>
+            <li>Full-screen game experience</li>
+            <li>Multiple simultaneous games</li>
+            <li>Better performance for complex pages</li>
+        </ul>
+
+        <h3>🚀 Deploying to Production</h3>
+        <ol>
+            <li>Deploy your Blazor TicTacToe app to a hosting service (Azure, AWS, etc.)</li>
+            <li>Update the iframe src to point to your deployed URL</li>
+            <li>Ensure CORS is enabled if embedding cross-domain</li>
+            <li>Test the embedded functionality thoroughly</li>
+        </ol>
+
+        <h3>⚙️ Configuration</h3>
+        <p>The app has CORS enabled by default to allow embedding from external sites.</p>
+        <p>You can customize the iframe size, styling, and behavior to match your website's design.</p>
+    </div>
+
+    <script>
+        function updateEmbedOption() {
+            const checkbox = document.getElementById('newTabCheckbox');
+            const iframe = document.getElementById('gameFrame');
+            const openInNewTab = checkbox.checked ? 'true' : 'false';
+            iframe.src = `http://localhost:5149/embed?openInNewTab=${openInNewTab}`;
+        }
+    </script>
+</body>
+</html>

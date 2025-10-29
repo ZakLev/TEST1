@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blazor TicTacToe - Zak Levine Portfolio</title>
+    
+    <!-- Portfolio CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+    
+    <!-- Custom styles -->
+    <style>
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .game-description {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .blazor-component-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 2rem 0;
+            min-height: 600px;
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .back-to-projects {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-projects:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .fallback-btn {
+            background: #007bff;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 0.5rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .fallback-btn:hover {
+            background: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .game-header {
+                padding: 1.5rem;
+            }
+            
+            .game-description {
+                padding: 1rem;
+            }
+            
+            .blazor-component-container {
+                padding: 1rem;
+            }
+            
+            .tech-stack {
+                gap: 0.5rem;
+            }
+            
+            .tech-badge {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #game-container {
+            transition: all 0.3s ease;
+        }
+        
+        #game-iframe {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Fullscreen styles */
+        .fullscreen-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .fullscreen-container.is-fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            background: white;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .fullscreen-container.is-fullscreen #game-iframe {
+            width: 100%;
+            height: calc(100vh - 40px);
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="navbar-container" role="navigation" aria-label="Main navigation"></div>
+    
+    <main id="main-content" tabindex="-1">
+        <div class="game-container">
+            <a href="../../projects.html" class="back-to-projects" aria-label="Back to all projects">
+                ← Back to Projects
+            </a>
+            
+            <div class="game-header">
+                <h1>Blazor TicTacToe</h1>
+                <p>Experience real-time multiplayer TicTacToe built with modern web technology</p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Blazor WebAssembly</span>
+                    <span class="tech-badge">Multiplayer</span>
+                    <span class="tech-badge">C#</span>
+                    <span class="tech-badge">HTML5</span>
+                    <span class="tech-badge">CSS3</span>
+                    <span class="tech-badge">Game</span>
+                </div>
+            </div>
+            
+            <div class="game-description">
+                <h2>About This Game</h2>
+                <p>
+                    This TicTacToe game showcases the power of Blazor WebAssembly with real-time multiplayer functionality 
+                    using SignalR. Play against friends or join random matches in this classic game reimagined with modern 
+                    web technologies. The game features room creation, matchmaking, turn timers, and automatic reconnection.
+                </p>
+                <h3>Features:</h3>
+                <ul>
+                    <li>Real-time multiplayer using SignalR technology</li>
+                    <li>Host private or public game rooms with 6-digit codes</li>
+                    <li>Random matchmaking for quick games</li>
+                    <li>Turn timer with 40-second countdown</li>
+                    <li>Automatic reconnection with 5-second grace period</li>
+                    <li>Score tracking across multiple games</li>
+                    <li>Responsive design for all screen sizes</li>
+                    <li>Built entirely with Blazor WebAssembly and C#</li>
+                </ul>
+            </div>
+            
+            <div class="blazor-component-container">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: #333;">
+                    🎮 Play TicTacToe - Multiplayer Game
+                </h3>
+                
+                <!-- Embedded TicTacToe Game using iframe -->
+                <div id="game-container" class="fullscreen-container" style="background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                    <div id="loading-indicator" style="text-align: center; padding: 2rem;">
+                        <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                        <p style="margin-top: 1rem; color: #666;">Loading TicTacToe Game...</p>
+                    </div>
+                    
+                    <iframe 
+                        id="game-iframe"
+                        src="TicTacToe/embed" 
+                        style="width: 100%; height: 900px; border: none; border-radius: 8px; display: none;"
+                        title="TicTacToe Game"
+                        onload="hideLoadingIndicator()">
+                    </iframe>
+                </div>
+                
+                <!-- Game Controls & Alternative Options -->
+                <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+                    <p style="color: #666; margin-bottom: 0.5rem; font-size: 0.9rem;">Game Controls & Options:</p>
+                    <button onclick="reloadGame()" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #28a745; border: none; cursor: pointer;">
+                        🔄 Reload Game
+                    </button>
+                    <button onclick="toggleFullscreen()" id="fullscreen-btn" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #007bff; border: none; cursor: pointer;">
+                        📱 Fullscreen
+                    </button>
+                    <a href="TicTacToe/embed" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem;">
+                        🔗 Open in New Tab
+                    </a>
+                </div>
+                
+                <footer style="text-align: center; margin-top: 30px; color: #666;">
+                    <p>Powered by Blazor WebAssembly & SignalR</p>
+                </footer>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Zak Levine. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for iframe management -->
+    <script>
+        // Simple iframe management
+        function hideLoadingIndicator() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const gameIframe = document.getElementById('game-iframe');
+            
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            if (gameIframe) {
+                gameIframe.style.display = 'block';
+            }
+            console.log('TicTacToe game loaded successfully in iframe');
+        }
+        
+        // Handle iframe loading errors
+        document.getElementById('game-iframe').addEventListener('error', function() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            if (loadingIndicator) {
+                loadingIndicator.innerHTML = `
+                    <p style="color: #d32f2f; font-weight: bold;">⚠️ Unable to load game</p>
+                    <p style="color: #666;">Please ensure the game server is accessible</p>
+                    <p style="color: #666; font-size: 0.9rem;">Refresh the page to try again</p>
+                `;
+            }
+        });
+        
+        // Load navbar with correct path resolution
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('Loading navbar from ../../navbar.html');
+            
+            fetch('../../navbar.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    document.getElementById('navbar-container').innerHTML = html;
+                    console.log('Navbar loaded successfully');
+                    
+                    // Fix navbar links for this subdirectory
+                    const navbarLinks = document.querySelectorAll('#navbar-container a');
+                    navbarLinks.forEach(link => {
+                        const href = link.getAttribute('href');
+                        if (href && !href.startsWith('http') && !href.startsWith('#')) {
+                            link.setAttribute('href', '../../' + href);
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Failed to load navbar:', error);
+                    // Fallback: create simple navigation
+                    document.getElementById('navbar-container').innerHTML = `
+                        <nav class="top-nav" style="background: #333; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <a href="../../index.html" style="color: white; font-weight: bold; text-decoration: none;">Portfolio</a>
+                            <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 1rem;">
+                                <li><a href="../../index.html" style="color: white; text-decoration: none;">Home</a></li>
+                                <li><a href="../../about.html" style="color: white; text-decoration: none;">About</a></li>
+                                <li><a href="../../projects.html" style="color: white; text-decoration: none;">Projects</a></li>
+                                <li><a href="../../contacts.html" style="color: white; text-decoration: none;">Contact</a></li>
+                                <li><a href="../../socials.html" style="color: white; text-decoration: none;">Socials</a></li>
+                            </ul>
+                        </nav>
+                    `;
+                });
+        });
+        
+        // Initialize error UI handlers if they exist
+        document.addEventListener('DOMContentLoaded', function() {
+            const dismissBtn = document.querySelector('#blazor-error-ui .dismiss');
+            const reloadBtn = document.querySelector('#blazor-error-ui .reload');
+            
+            if (dismissBtn) {
+                dismissBtn.addEventListener('click', function () {
+                    document.getElementById("blazor-error-ui").style.display = "none";
+                });
+            }
+
+            if (reloadBtn) {
+                reloadBtn.addEventListener('click', function () {
+                    location.reload();
+                });
+            }
+        });
+        
+        // Game control functions
+        function reloadGame() {
+            console.log('🔄 Reloading game...');
+            
+            const gameIframe = document.getElementById('game-iframe');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            
+            // Show loading indicator and hide iframe
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'block';
+                loadingIndicator.innerHTML = `
+                    <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 1rem; color: #666;">Reloading TicTacToe Game...</p>
+                `;
+            }
+            
+            if (gameIframe) {
+                gameIframe.style.display = 'none';
+                // Reload the iframe by changing its src
+                const timestamp = new Date().getTime();
+                gameIframe.src = `TicTacToe/embed?t=${timestamp}`;
+            }
+        }
+        
+        function toggleFullscreen() {
+            const container = document.getElementById('game-container');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            
+            if (!container.classList.contains('is-fullscreen')) {
+                // Enter fullscreen
+                container.classList.add('is-fullscreen');
+                fullscreenBtn.innerHTML = '📱 Exit Fullscreen';
+                fullscreenBtn.title = 'Exit Fullscreen';
+                
+                // Try to use native fullscreen API if available
+                if (container.requestFullscreen) {
+                    container.requestFullscreen().catch(err => {
+                        console.log('Fullscreen API not available, using CSS fullscreen');
+                    });
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                
+                console.log('🎮 Entered fullscreen mode');
+            } else {
+                // Exit fullscreen
+                container.classList.remove('is-fullscreen');
+                fullscreenBtn.innerHTML = '📱 Fullscreen';
+                fullscreenBtn.title = 'Toggle Fullscreen';
+                
+                // Exit native fullscreen if active
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(err => {
+                        console.log('Exiting CSS fullscreen only');
+                    });
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                
+                console.log('🎮 Exited fullscreen mode');
+            }
+        }
+        
+        // Handle native fullscreen changes
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+        
+        function handleFullscreenChange() {
+            const container = document.getElementById('game-container');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                // Native fullscreen was exited
+                container.classList.remove('is-fullscreen');
+                if (fullscreenBtn) {
+                    fullscreenBtn.innerHTML = '📱 Fullscreen';
+                    fullscreenBtn.title = 'Toggle Fullscreen';
+                }
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // F11 for fullscreen toggle
+            if (event.key === 'F11') {
+                event.preventDefault();
+                toggleFullscreen();
+            }
+            
+            // Escape to exit fullscreen
+            if (event.key === 'Escape') {
+                const container = document.getElementById('game-container');
+                if (container && container.classList.contains('is-fullscreen')) {
+                    toggleFullscreen();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
