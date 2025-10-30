@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Error page - Page not found">
+    <title>404 - Page Not Found</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error-image {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        .error-title {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #d32f2f;
+            margin: 0 0 1rem 0;
+        }
+        
+        .error-message {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .error-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .error-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .error-image {
+                max-width: 300px;
+            }
+            
+            .error-title {
+                font-size: 3rem;
+            }
+            
+            .error-message {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .error-image {
+                max-width: 250px;
+            }
+            
+            .error-title {
+                font-size: 2.5rem;
+            }
+            
+            .error-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" role="navigation" aria-label="Main navigation"></div>
+    
+    <main>
+        <div class="error-container">
+            <img src="images/SadEgg.png" 
+                 alt="Crying egg wails at its lost bretheren" 
+                 class="error-image">
+            
+            <h1 class="error-title">404</h1>
+            <p class="error-message">Oops! The page you're looking for has cracked and rolled away.</p>
+            
+            <a href="index.html" class="error-button">Return Home</a>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Zak Levine. All rights reserved.</p>
+    </footer>
+    
+    <script src="navbar.js"></script>
+</body>
+</html>
