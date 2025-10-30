@@ -215,7 +215,7 @@
                     
                     <iframe 
                         id="game-iframe"
-                        src="TicTacToe/embed" 
+                        src="https://test.zaklevine.com/TicTacToe/TicTacToe/test" 
                         style="width: 100%; height: 900px; border: none; border-radius: 8px; display: none;"
                         title="TicTacToe Game"
                         onload="hideLoadingIndicator()">
@@ -231,7 +231,7 @@
                     <button onclick="toggleFullscreen()" id="fullscreen-btn" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem; background: #007bff; border: none; cursor: pointer;">
                         📱 Fullscreen
                     </button>
-                    <a href="TicTacToe/embed" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem;">
+                    <a href="https://test.zaklevine.com/TicTacToe/TicTacToe/embed" target="_blank" class="fallback-btn" style="margin: 0.25rem; font-size: 0.9rem;">
                         🔗 Open in New Tab
                     </a>
                 </div>
@@ -263,16 +263,63 @@
             console.log('TicTacToe game loaded successfully in iframe');
         }
         
-        // Handle iframe loading errors
-        document.getElementById('game-iframe').addEventListener('error', function() {
+        // Check if iframe content loaded successfully
+        function checkIframeLoad() {
+            const gameIframe = document.getElementById('game-iframe');
             const loadingIndicator = document.getElementById('loading-indicator');
+            
+            // Wait a bit to see if iframe loads
+            setTimeout(() => {
+                try {
+                    // Try to access iframe content to see if it loaded
+                    const iframeDoc = gameIframe.contentDocument || gameIframe.contentWindow.document;
+                    
+                    // Check if iframe is showing an error or blank page
+                    if (!iframeDoc || iframeDoc.body.innerHTML.trim() === '' || 
+                        iframeDoc.title.includes('404') || iframeDoc.title.includes('Error')) {
+                        showServerOfflineMessage();
+                    }
+                } catch (e) {
+                    // Cross-origin or other error - try to detect by checking load event
+                    console.log('Unable to check iframe content (may be cross-origin)');
+                }
+            }, 3000); // Wait 3 seconds for content to load
+        }
+        
+        function showServerOfflineMessage() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const gameIframe = document.getElementById('game-iframe');
+            
             if (loadingIndicator) {
+                loadingIndicator.style.display = 'block';
                 loadingIndicator.innerHTML = `
-                    <p style="color: #d32f2f; font-weight: bold;">⚠️ Unable to load game</p>
-                    <p style="color: #666;">Please ensure the game server is accessible</p>
-                    <p style="color: #666; font-size: 0.9rem;">Refresh the page to try again</p>
+                    <div style="text-align: center; padding: 3rem;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🔌</div>
+                        <p style="color: #d32f2f; font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem;">Server Offline</p>
+                        <p style="color: #666; margin-bottom: 0.5rem;">The TicTacToe game server is currently offline or unavailable.</p>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">This could be due to maintenance or the server not being started.</p>
+                        <button onclick="reloadGame()" class="fallback-btn" style="margin: 0.5rem; background: #28a745; border: none; cursor: pointer; padding: 0.75rem 1.5rem;">
+                            🔄 Try Again
+                        </button>
+                    </div>
                 `;
             }
+            
+            if (gameIframe) {
+                gameIframe.style.display = 'none';
+            }
+        }
+        
+        // Handle iframe loading errors
+        const gameIframe = document.getElementById('game-iframe');
+        
+        gameIframe.addEventListener('error', function() {
+            showServerOfflineMessage();
+        });
+        
+        // Also check after a timeout if nothing loaded
+        gameIframe.addEventListener('load', function() {
+            checkIframeLoad();
         });
         
         // Load navbar with correct path resolution
@@ -355,7 +402,7 @@
                 gameIframe.style.display = 'none';
                 // Reload the iframe by changing its src
                 const timestamp = new Date().getTime();
-                gameIframe.src = `TicTacToe/embed?t=${timestamp}`;
+                gameIframe.src = `https://test.zaklevine.com/TicTacToe/TicTacToe/embed?t=${timestamp}`;
             }
         }
         
